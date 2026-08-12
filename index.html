@@ -3,350 +3,560 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilal Tariq - Content Producer, Cinematographer &amp; Motion Designer</title>
-<meta name="description" content="Bilal Tariq — Content Producer, Video Editor, Motion Designer &amp; Camera Operator. A cinematic portfolio.">
-<link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap">
+<title>BeeTee Studio | Bilal Tariq - Content Producer, Cinematographer &amp; Motion Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { heading: ['Inter','sans-serif'], body: ['Inter','sans-serif'] },
+        colors: { ink: '#050505', gold: '#f3c005' },
+        borderColor: { DEFAULT: '#f3c005' }
+      }
+    }
+  }
+</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-ink text-white font-body overflow-x-hidden">
 
-<!-- Custom cursor trail -->
-<div class="cursor-layer" aria-hidden="true">
-  <span class="cursor-dot" data-size="8"></span>
-  <span class="cursor-dot" data-size="7"></span>
-  <span class="cursor-dot" data-size="6"></span>
-  <span class="cursor-dot" data-size="5"></span>
-  <span class="cursor-dot" data-size="4"></span>
-  <span class="cursor-dot" data-size="3"></span>
+<!-- SPLASH SCREEN -->
+<div id="splashScreen" class="fixed inset-0 z-[200] flex items-center justify-center bg-ink">
+  <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/48b2825d9_BEETEE_LOGO_HOR_MAIN.png/v1/fit/w_885,h_346,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/48b2825d9_BEETEE_LOGO_HOR_MAIN.webp" alt="BeeTee Studio" class="splash-logo w-[52vw] max-w-[280px]">
 </div>
 
-<!-- Click ripple layer -->
-<div class="ripple-layer" aria-hidden="true"></div>
-
-<!-- Grain overlay -->
-<div class="grain-overlay" aria-hidden="true"></div>
-
-<!-- Vignette -->
-<div class="vignette-overlay" aria-hidden="true"></div>
-
-<!-- Corner brackets -->
-<div class="corner-brackets" aria-hidden="true">
-  <div class="bracket bracket-tl"></div>
-  <div class="bracket bracket-tr"></div>
-  <div class="bracket bracket-bl"></div>
-  <div class="bracket bracket-br"></div>
+<div class="grain-overlay" aria-hidden="true">
+  <div class="grain-layer grain-fine"></div>
+  <div class="grain-layer grain-coarse"></div>
 </div>
+
+<!-- FIXED VIEWFINDER CORNER FRAME -->
+<div aria-hidden="true" class="pointer-events-none fixed inset-3 z-50 md:inset-5">
+  <div class="absolute h-4 w-4 md:h-6 md:w-6 left-0 top-0 border-l border-t"></div>
+  <div class="absolute h-4 w-4 md:h-6 md:w-6 right-0 top-0 border-r border-t"></div>
+  <div class="absolute h-4 w-4 md:h-6 md:w-6 bottom-0 left-0 border-b border-l"></div>
+  <div class="absolute h-4 w-4 md:h-6 md:w-6 bottom-0 right-0 border-b border-r"></div>
+</div>
+
+<!-- TRAILING CURSOR -->
+<div class="pointer-events-none fixed inset-0 z-[120]" id="cursorTrail" aria-hidden="true">
+  <span class="cursor-dot"></span>
+  <span class="cursor-dot"></span>
+  <span class="cursor-dot"></span>
+  <span class="cursor-dot"></span>
+  <span class="cursor-dot"></span>
+  <span class="cursor-dot"></span>
+</div>
+
+<!-- SCROLL INDICATOR -->
+<div class="pointer-events-none fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 flex-col items-center text-gold" id="scrollIndicator">
+  <span class="mb-2 text-[9px] tracking-[0.4em]">SCROLL</span>
+  <div class="flex flex-col items-center -space-y-2">
+    <svg class="chevron-bounce" style="animation-delay:0ms" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    <svg class="chevron-bounce" style="animation-delay:150ms" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    <svg class="chevron-bounce" style="animation-delay:300ms" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="fixed inset-x-0 top-0 z-50">
+  <div class="relative flex h-14 items-center justify-center px-5 md:h-16 md:px-8">
+    <div class="absolute left-5 flex items-center gap-2 md:left-8">
+      <span class="h-2 w-2 rounded-full bg-[#ff3030] animate-rec"></span>
+      <span class="text-[10px] tracking-[0.35em] text-white/60">REC</span>
+    </div>
+    <span class="inline-block relative h-9 md:h-12" style="aspect-ratio: 161 / 95;">
+      <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.png/v1/fit/w_250,h_96,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="BeeTee Studio">
+    </span>
+    <div class="absolute right-5 text-[10px] tracking-[0.35em] text-white/40 md:right-8">BT &middot; 2026</div>
+  </div>
+</header>
 
 <main>
 
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="hero-media">
-      <iframe class="hero-video" src="https://player.vimeo.com/video/1214439194?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1" title="Showreel" allow="autoplay; fullscreen" tabindex="-1"></iframe>
-      <div class="hero-scrim"></div>
-      <div class="hero-gradient"></div>
+  <!-- HERO -->
+  <section class="relative h-[100svh] w-full overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="hero-video-wrap">
+        <iframe src="https://player.vimeo.com/video/1214439194?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1" title="Showreel" allow="autoplay; fullscreen" class="hero-video" frameborder="0"></iframe>
+      </div>
+      <div class="absolute inset-0 bg-black/55"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#050505]"></div>
     </div>
-    <div class="hero-rec">
-      <span class="rec-dot"></span>
-      <span>REC</span>
-    </div>
-    <div class="hero-tag">BT · 2026</div>
-    <div class="hero-center">
-      <h1 class="hero-title reveal-fade">BILAL TARIQ</h1>
-      <div class="hero-roles reveal-fade">
-        <span>PRODUCER</span><span class="dot">·</span>
-        <span>CINEMATOGRAPHER</span><span class="dot">·</span>
-        <span>EDITOR</span><span class="dot">·</span>
+    <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+      <div class="mb-5 flex flex-col items-center gap-1 text-[clamp(0.7rem,2vw,0.95rem)] tracking-[0.3em] text-gold md:flex-row md:flex-wrap md:justify-center md:gap-x-3">
+        <span>PRODUCER</span><span class="hidden opacity-40 md:inline">&middot;</span>
+        <span>CINEMATOGRAPHER</span><span class="hidden opacity-40 md:inline">&middot;</span>
+        <span>EDITOR</span><span class="hidden opacity-40 md:inline">&middot;</span>
         <span>MOTION DESIGNER</span>
       </div>
-      <div class="hero-scroll reveal-fade">
-        <span>SCROLL</span>
-        <div class="chevrons">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      <h1 class="font-heading text-[clamp(2.1rem,11vw,11rem)] font-bold leading-[0.9] tracking-tight">BILAL TARIQ</h1>
+      <p class="mt-5 text-center text-[clamp(0.7rem,2vw,0.95rem)] tracking-[0.2em] uppercase text-gold">Founder and creative director of BeeTee Studio</p>
+    </div>
+  </section>
+
+  <!-- ABOUT (word-stagger reveal) -->
+  <section class="px-6 py-28 md:py-36">
+    <div class="mx-auto max-w-3xl text-left">
+      <p class="word-reveal font-body text-base uppercase leading-relaxed md:text-xl md:leading-relaxed" id="aboutP1"
+         data-text="From designing real-time graphics, to framing the cities that shape a broadcast&rsquo;s look and adds color, to producing stories from the heart of live games and animating the graphics that give it all its pulse."></p>
+      <p class="word-reveal mt-8 font-body text-base uppercase leading-relaxed text-white/50 md:text-xl md:leading-relaxed" id="aboutP2"
+         data-text="BeeTee Studio is where production, editing, animation, and design come together, built around getting every frame right."
+         data-highlight="beetee,studio,production,editing,animation,design"></p>
+    </div>
+  </section>
+
+  <!-- SERVICES + MANIFESTO: "I" stays fixed; each word zooms in and, at full opacity, -->
+  <!-- reveals its own paired description text + image, all synced to the same frame index. -->
+  <section class="relative pin-services" id="pinServices">
+    <div class="sticky top-0 flex h-[100svh] w-full items-center overflow-hidden px-[8vw] md:px-[12vw]">
+      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="0">Creative direction from concept to final cut.</p>
+      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="1">Cinematography that frames the moment.</p>
+      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="2">Rhythm, pace, and the invisible cut.</p>
+      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="3">Movement that guides the eye.</p>
+      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="4">Stories worth watching.</p>
+
+      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="0">
+        <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
+          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e6139abf3_generated_6e7a65cb.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e6139abf3_generated_6e7a65cb.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+        </span>
+      </div>
+      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="1">
+        <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
+          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/815fb11c8_generated_3c4ff988.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/815fb11c8_generated_3c4ff988.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+        </span>
+      </div>
+      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="2">
+        <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
+          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/33b0d13e1_generated_3cffcb13.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/33b0d13e1_generated_3cffcb13.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+        </span>
+      </div>
+      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="3">
+        <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
+          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ff228de69_generated_3d97101c.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ff228de69_generated_3d97101c.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+        </span>
+      </div>
+
+      <div class="relative z-20 flex items-baseline gap-[0.18em]">
+        <h2 class="manifesto-i relative z-10 select-none font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight text-gold">I</h2>
+        <div class="relative z-10 h-[1em] manifesto-word-box">
+          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="0">PRODUCE.</span>
+          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="1">CAPTURE.</span>
+          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="2">EDIT.</span>
+          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="3">ANIMATE.</span>
+          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="4">CREATE.</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== INTRO SCROLLYTELLING ===== -->
-  <section class="intro-scroll" id="introScroll">
-    <div class="intro-sticky">
-      <p class="intro-caption" data-index="0">Creative direction from concept to final cut.</p>
-      <p class="intro-caption" data-index="1">Cinematography that frames the moment.</p>
-      <p class="intro-caption" data-index="2">Rhythm, pace, and the invisible cut.</p>
-      <p class="intro-caption" data-index="3">MOVEMENT THAT GUIDES THE EYE</p>
-      <p class="intro-caption" data-index="4">STORIES WORTH WATCHING</p>
+  <!-- FEATURED WORK -->
+  <section class="relative py-28 md:py-40">
+    <div class="mb-14 flex items-end justify-between px-6 md:mb-20 md:px-12">
+      <h2 class="font-heading text-[clamp(2.5rem,8vw,6rem)] font-bold leading-none tracking-tight">FEATURED WORK</h2>
+      <span class="text-[9px] tracking-[0.3em] text-gold md:text-[11px] md:tracking-[0.35em]">DRAG / SCROLL &rarr;</span>
+    </div>
 
-      <div class="intro-float" data-index="0"><div class="intro-float-glow"></div><img src="assets/images/intro/float-1.png" alt="" loading="lazy"></div>
-      <div class="intro-float" data-index="1"><div class="intro-float-glow"></div><img src="assets/images/intro/float-2.png" alt="" loading="lazy"></div>
-      <div class="intro-float" data-index="2"><div class="intro-float-glow"></div><img src="assets/images/intro/float-3.png" alt="" loading="lazy"></div>
-      <div class="intro-float" data-index="3"><div class="intro-float-glow"></div><img src="assets/images/intro/float-4.png" alt="" loading="lazy"></div>
+    <div class="flex items-stretch px-4 md:px-12">
+      <div class="sprocket-strip hidden md:flex" aria-hidden="true">
+        <div class="sprocket-hole" ></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      </div>
 
-      <div class="intro-word-row">
-        <h2 class="intro-i">I</h2>
-        <div class="intro-word-cycle">
-          <span data-index="0">PRODUCE.</span>
-          <span data-index="1">CAPTURE.</span>
-          <span data-index="2">EDIT.</span>
-          <span data-index="3">ANIMATE.</span>
-          <span data-index="4">CREATE.</span>
+      <div class="drag-gallery no-scrollbar flex flex-1 gap-4 overflow-x-auto py-2 md:gap-5 snap-x" id="dragGallery">
+        <!-- 01 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://aryplus.tv/series/69fe1b96360776cee2528d17" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/T1WFoAyYKUM/maxresdefault.jpg" class="w-full h-full object-cover" alt="ICC Men's T20 World Cup 2026" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">01</span>
+          </a>
+          <div class="mt-4 flex items-start justify-between px-1">
+            <p class="mb-1 text-[10px] tracking-[0.35em] text-white/50">SHOWREEL</p>
+          </div>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">ICC MEN&rsquo;S T20 WORLD CUP 2026</h3>
+        </div>
+
+        <!-- 02 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://aryplus.tv/series/69fe1b96360776cee2528d17" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/-JiuvHEqhE8/maxresdefault.jpg" class="w-full h-full object-cover" alt="ICC Champions Trophy 2025" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">02</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">SHOWREEL</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">ICC CHAMPIONS TROPHY 2025</h3>
+        </div>
+
+        <!-- 03 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://aryplus.tv/series/69fe1b96360776cee2528d17" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ff28e96f7_documentary.jpg/v1/fill/w_939,h_783,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ff28e96f7_documentary.webp" class="w-full h-full object-cover" alt="Inside the Kings' Camp" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">03</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">DOCUMENTARY SERIES</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">INSIDE THE KINGS&rsquo; CAMP</h3>
+        </div>
+
+        <!-- 04 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/reels/Da0S-gaBltf/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Sa_oEoVlzt4/maxresdefault.jpg" class="w-full h-full object-cover" alt="First Test" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">04</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">MATCH OPENER - PAK V SA 2025</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">FIRST TEST</h3>
+        </div>
+
+        <!-- 05 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/reels/DWo4FI7jHEe/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Qd7g-AlgDOc/maxresdefault.jpg" class="w-full h-full object-cover" alt="Broadcast Packaging" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">05</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">SHOWREEL</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">BROADCAST PACKAGING</h3>
+        </div>
+
+        <!-- 06 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/reels/DDU3LJsTf1M/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/2KzMDLHWAEQ/maxresdefault.jpg" class="w-full h-full object-cover" alt="Motion Graphics & VFX" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">06</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">SHOWREEL</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">MOTION GRAPHICS &amp; VFX</h3>
+        </div>
+
+        <!-- 07 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/reels/DXdxf85jIvw/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/QEEjbbZdgOs/maxresdefault.jpg" class="w-full h-full object-cover" alt="DP World ILT20 2025-26" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">07</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">SHOWREEL</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">DP WORLD ILT20 2025-26</h3>
+        </div>
+
+        <!-- 08 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/karachikingsary/reel/DW_A4iFjF_D/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/aVsvlc29ENs/maxresdefault.jpg" class="w-full h-full object-cover" alt="Final Match - BPL 2026" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">08</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">MATCH OPENER - BPL 2026</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">FINAL MATCH</h3>
+        </div>
+
+        <!-- 09 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/karachikingsary/reel/DWnr4w1jHN1/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/e5gmNXISIXo/maxresdefault.jpg" class="w-full h-full object-cover" alt="Abu Dhabi T10 2025" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">09</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">AFTER MOVIE</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">ABU DHABI T10 2025</h3>
+        </div>
+
+        <!-- 10 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/biltq/reel/DXSBvIgjGRj/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/A2vqYaAKEho/maxresdefault.jpg" class="w-full h-full object-cover" alt="ACC Emerging Cup 2024" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">10</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">AFTER MOVIE</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">ACC EMERGING CUP 2024</h3>
+        </div>
+
+        <!-- 11 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/biltq/reel/DFVFff-CG6i/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/AoOO5jAhJok/maxresdefault.jpg" class="w-full h-full object-cover" alt="Dickwella & Tanvi at Spartan" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">11</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">FEATURE - ABU DHABI T10 2025</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">DICKWELLA &amp; TANVI AT SPARTAN</h3>
+        </div>
+
+        <!-- 12 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/karachikingsary/reel/DXi1J6kjJ-s/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/x5ldklM48oQ/maxresdefault.jpg" class="w-full h-full object-cover" alt="The Pitch Masters" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">12</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">FEATURE - ZIMAFRO T10 2024</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">THE PITCH MASTERS</h3>
+        </div>
+
+        <!-- 13 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://www.instagram.com/karachikingsary/reel/DXbEQFXjFxd/" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/s84UpCpTLAI/maxresdefault.jpg" class="w-full h-full object-cover" alt="Victoria Falls ft. Karishma" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">13</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">FEATURE - ZIMAFRO T10 2024</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">VICTORIA FALLS ft. KARISHMA</h3>
+        </div>
+
+        <!-- 14 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="#" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Qek9_gzTyrY/maxresdefault.jpg" class="w-full h-full object-cover" alt="Wild is Life ft Erin" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">14</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">FEATURE - ZIMAFRO T10 2024</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">WILD IS LIFE ft ERIN</h3>
+        </div>
+
+        <!-- 15 -->
+        <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="#" target="_blank" rel="noopener">
+            <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/bi8QLLTMGB4/maxresdefault.jpg" class="w-full h-full object-cover" alt="Babar Azam's Home" loading="lazy"></span>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+            <span class="absolute right-3 top-3 text-[11px] tracking-[0.3em] text-white/40">15</span>
+          </a>
+          <p class="mt-4 mb-1 text-[10px] tracking-[0.35em] text-white/50 px-1">FEATURE - PAK V SA 2025</p>
+          <h3 class="font-heading text-2xl font-semibold tracking-tight md:text-4xl px-1">BABAR AZAM&rsquo;S HOME</h3>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ===== FEATURED WORK ===== -->
-  <section class="featured">
-    <div class="section-head">
-      <h2 class="reveal-up">FEATURED WORK</h2>
-      <span class="hint">DRAG / SCROLL →</span>
-    </div>
-    <div class="featured-row">
-      <div class="filmstrip" aria-hidden="true"></div>
-      <div class="featured-scroll no-scrollbar" id="featuredScroll">
-
-        <a class="work-card reveal-up" href="https://aryplus.tv/series/69fe1b96360776cee2528d17" target="_blank" rel="noreferrer">
-          <img src="assets/images/work/documentary.jpg" alt="INSIDE THE KINGS' CAMP" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-info">
-            <p class="work-cat">DOCUMENTARY SERIES</p>
-            <h3>INSIDE THE KINGS' CAMP</h3>
-          </div>
-        </a>
-
-        <button class="work-card reveal-up" data-video="-JiuvHEqhE8" data-title="ICC CHAMPIONS TROPHY 2025">
-          <img src="https://img.youtube.com/vi/-JiuvHEqhE8/maxresdefault.jpg" alt="ICC CHAMPIONS TROPHY 2025" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">SHOWREEL</p><h3>ICC CHAMPIONS TROPHY 2025</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="T1WFoAyYKUM" data-title="ICC MEN'S T20 WORLD CUP 2026">
-          <img src="https://img.youtube.com/vi/T1WFoAyYKUM/maxresdefault.jpg" alt="ICC MEN'S T20 WORLD CUP 2026" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">SHOWREEL</p><h3>ICC MEN'S T20 WORLD CUP 2026</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="Qd7g-AlgDOc" data-title="BROADCAST PACKAGING">
-          <img src="https://img.youtube.com/vi/Qd7g-AlgDOc/maxresdefault.jpg" alt="BROADCAST PACKAGING" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">SHOWREEL</p><h3>BROADCAST PACKAGING</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="2KzMDLHWAEQ" data-title="MOTION GRAPHICS & VFX">
-          <img src="https://img.youtube.com/vi/2KzMDLHWAEQ/maxresdefault.jpg" alt="MOTION GRAPHICS & VFX" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">SHOWREEL</p><h3>MOTION GRAPHICS &amp; VFX</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="QEEjbbZdgOs" data-title="DP WORLD ILT20 2025-26">
-          <img src="https://img.youtube.com/vi/QEEjbbZdgOs/maxresdefault.jpg" alt="DP WORLD ILT20 2025-26" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">SHOWREEL</p><h3>DP WORLD ILT20 2025-26</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="aVsvlc29ENs" data-title="FINAL MATCH">
-          <img src="https://img.youtube.com/vi/aVsvlc29ENs/maxresdefault.jpg" alt="FINAL MATCH" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">MATCH OPENER - BPL 2026</p><h3>FINAL MATCH</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="Sa_oEoVlzt4" data-title="FIRST TEST">
-          <img src="https://img.youtube.com/vi/Sa_oEoVlzt4/maxresdefault.jpg" alt="FIRST TEST" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">MATCH OPENER - PAK V SA 2025</p><h3>FIRST TEST</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="e5gmNXISIXo" data-title="ABU DHABI T10 2025">
-          <img src="https://img.youtube.com/vi/e5gmNXISIXo/maxresdefault.jpg" alt="ABU DHABI T10 2025" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">AFTER MOVIE</p><h3>ABU DHABI T10 2025</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="A2vqYaAKEho" data-title="ACC EMERGING CUP 2024">
-          <img src="https://img.youtube.com/vi/A2vqYaAKEho/maxresdefault.jpg" alt="ACC EMERGING CUP 2024" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">AFTER MOVIE</p><h3>ACC EMERGING CUP 2024</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="AoOO5jAhJok" data-title="DICKWELLA & TANVI AT SPARTAN">
-          <img src="https://img.youtube.com/vi/AoOO5jAhJok/maxresdefault.jpg" alt="DICKWELLA & TANVI AT SPARTAN" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">FEATURE - ABU DHABI T10 2025</p><h3>DICKWELLA &amp; TANVI AT SPARTAN</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="x5ldklM48oQ" data-title="THE PITCH MASTERS">
-          <img src="https://img.youtube.com/vi/x5ldklM48oQ/maxresdefault.jpg" alt="THE PITCH MASTERS" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">FEATURE - ZIMAFRO T10 2024</p><h3>THE PITCH MASTERS</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="s84UpCpTLAI" data-title="VICTORIA FALLS ft. KARISHMA">
-          <img src="https://img.youtube.com/vi/s84UpCpTLAI/maxresdefault.jpg" alt="VICTORIA FALLS ft. KARISHMA" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">FEATURE - ZIMAFRO T10 2024</p><h3>VICTORIA FALLS ft. KARISHMA</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="Qek9_gzTyrY" data-title="WILD IS LIFE ft ERIN">
-          <img src="https://img.youtube.com/vi/Qek9_gzTyrY/maxresdefault.jpg" alt="WILD IS LIFE ft ERIN" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">FEATURE - ZIMAFRO T10 2024</p><h3>WILD IS LIFE ft ERIN</h3></div>
-        </button>
-
-        <button class="work-card reveal-up" data-video="bi8QLLTMGB4" data-title="BABAR AZAM'S HOME">
-          <img src="https://img.youtube.com/vi/bi8QLLTMGB4/maxresdefault.jpg" alt="BABAR AZAM'S HOME" loading="lazy">
-          <div class="work-gradient"></div>
-          <div class="work-play"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span></div>
-          <div class="work-info"><p class="work-cat">FEATURE - PAK V SA 2025</p><h3>BABAR AZAM'S HOME</h3></div>
-        </button>
-
+      <div class="sprocket-strip hidden md:flex" aria-hidden="true">
+        <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== DIGITAL GALLERY ===== -->
-  <section class="digital-gallery">
-    <div class="section-head">
-      <h2 class="reveal-up">DIGITAL GALLERY</h2>
-      <span class="hint">INSTAGRAM REELS</span>
+  <!-- DIGITAL GALLERY (static responsive grid) -->
+  <section class="relative py-28 md:py-40">
+    <div class="mb-14 flex items-end justify-between px-6 md:mb-20 md:px-12">
+      <h2 class="font-heading text-[clamp(2.5rem,8vw,6rem)] font-bold leading-none tracking-tight">DIGITAL GALLERY</h2>
+      <span class="text-[9px] tracking-[0.3em] text-gold md:text-[11px] md:tracking-[0.35em]">INSTAGRAM REELS</span>
     </div>
-    <div class="reel-grid">
-      <a class="reel-card reveal-up" href="https://www.instagram.com/reels/Da0S-gaBltf/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-01.png" alt="Instagram reel 01" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/reels/DWo4FI7jHEe/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-02.png" alt="Instagram reel 02" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/reels/DDU3LJsTf1M/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-03.png" alt="Instagram reel 03" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/reels/DXdxf85jIvw/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-04.png" alt="Instagram reel 04" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/karachikingsary/reel/DW_A4iFjF_D/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-05.png" alt="Instagram reel 05" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/karachikingsary/reel/DWnr4w1jHN1/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-06.png" alt="Instagram reel 06" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/biltq/reel/DXSBvIgjGRj/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-07.png" alt="Instagram reel 07" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/biltq/reel/DFVFff-CG6i/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-08.png" alt="Instagram reel 08" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/karachikingsary/reel/DXi1J6kjJ-s/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-09.png" alt="Instagram reel 09" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
-      <a class="reel-card reveal-up" href="https://www.instagram.com/karachikingsary/reel/DXbEQFXjFxd/" target="_blank" rel="noreferrer"><img src="assets/images/gallery/reel-10.png" alt="Instagram reel 10" loading="lazy"><div class="reel-overlay"><span>WATCH ON INSTAGRAM</span></div></a>
+
+    <div class="grid grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-4 md:gap-4 md:px-12 lg:grid-cols-5">
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/karachikingsary/reel/DW_A4iFjF_D/" target="_blank" rel="noopener">
+        <span class="reel-num">01</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/5e3f1bf2f_01-Jofra.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/5e3f1bf2f_01-Jofra.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/karachikingsary/reel/DWnr4w1jHN1/" target="_blank" rel="noopener">
+        <span class="reel-num">02</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/7703e3be0_02-AzamKhanGolf.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/7703e3be0_02-AzamKhanGolf.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/biltq/reel/DXSBvIgjGRj/" target="_blank" rel="noopener">
+        <span class="reel-num">03</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ff0d53a0d_03-DubaiFrame_.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ff0d53a0d_03-DubaiFrame_.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/biltq/reel/DFVFff-CG6i/" target="_blank" rel="noopener">
+        <span class="reel-num">04</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/be48d15ab_04-GameDayonGround.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/be48d15ab_04-GameDayonGround.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/karachikingsary/reel/DXi1J6kjJ-s/" target="_blank" rel="noopener">
+        <span class="reel-num">05</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/044640119_05-Screenshot2026-07-31at21645AM.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/044640119_05-Screenshot2026-07-31at21645AM.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/karachikingsary/reel/DXbEQFXjFxd/" target="_blank" rel="noopener">
+        <span class="reel-num">06</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/b9d85ded1_06-Screenshot2026-07-31at21852AM.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/b9d85ded1_06-Screenshot2026-07-31at21852AM.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/reels/Da0S-gaBltf/" target="_blank" rel="noopener">
+        <span class="reel-num">07</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/00dcc2c64_07-ShotIllusion.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/00dcc2c64_07-ShotIllusion.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/reels/DWo4FI7jHEe/" target="_blank" rel="noopener">
+        <span class="reel-num">08</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/8feb12fda_08-BabarOut.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/8feb12fda_08-BabarOut.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/reels/DDU3LJsTf1M/" target="_blank" rel="noopener">
+        <span class="reel-num">09</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/f42f69c9a_09-Screenshot2026-07-31at21605AM.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/f42f69c9a_09-Screenshot2026-07-31at21605AM.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
+      <a class="reel-card group relative block aspect-[9/16] overflow-hidden border border-white/10 bg-white/[0.02]" href="https://www.instagram.com/reels/DXdxf85jIvw/" target="_blank" rel="noopener">
+        <span class="reel-num">10</span>
+        <div class="reel-ig-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></div>
+        <span class="thumb-zoom block h-full w-full"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/60a2125ef_10-Screenshot2026-07-31at21620AM.png/v1/fill/w_267,h_476,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/60a2125ef_10-Screenshot2026-07-31at21620AM.webp" class="w-full h-full object-cover" alt="" loading="lazy"></span>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20"></div>
+        <span class="reel-cta">WATCH ON INSTAGRAM</span>
+      </a>
     </div>
   </section>
 
-  <!-- ===== TRUSTED BY ===== -->
-  <section class="logo-band">
-    <p class="band-label reveal-fade">TRUSTED BY</p>
-    <div class="logo-grid">
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/acc.png" alt="ACC" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/asiacup.png" alt="ASIA CUP" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/bpl.png" alt="BPL" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/fifa.png" alt="FIFA" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/icc.png" alt="ICC" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/ilt20.png" alt="ILT20" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/itw.png" alt="ITW" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/jiostar.png" alt="JIO STAR" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/kaf.png" alt="KAF" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/nep.png" alt="NEP" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/pcb.png" alt="PCB" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/psl.png" alt="PSL" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/sv.png" alt="SV" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/starsports.png" alt="STAR SPORTS" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/t10.png" alt="T10" loading="lazy"></div>
-      <div class="logo-item reveal-up"><div class="glow"></div><img src="assets/images/logos/tpt.png" alt="TPT" loading="lazy"></div>
+  <!-- TRUSTED BY (static dimmed row) -->
+  <section class="py-16 md:py-24">
+    <p class="mb-12 text-center text-[11px] tracking-[0.4em] text-gold">TRUSTED BY</p>
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-7 px-6 md:px-12">
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/eb9985ec1_ACC.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/eb9985ec1_ACC.webp" alt="ACC" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/372cf4c0b_ASIACUP.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/372cf4c0b_ASIACUP.webp" alt="Asia Cup" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/dc0c73777_BPL.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/dc0c73777_BPL.webp" alt="BPL" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/1199dac37_FIFA.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/1199dac37_FIFA.webp" alt="FIFA" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/a91c51030_ICC.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/a91c51030_ICC.webp" alt="ICC" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/c10ba13f2_ILT20.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/c10ba13f2_ILT20.webp" alt="ILT20" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/11ecef598_ITW.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/11ecef598_ITW.webp" alt="ITW" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/80bed2125_JIOSTAR.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/80bed2125_JIOSTAR.webp" alt="JioStar" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/6b55c8071_KAF.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/6b55c8071_KAF.webp" alt="KAF" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/0e5c6a07a_NEP.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/0e5c6a07a_NEP.webp" alt="NEP" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/1b61232c9_PCB.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/1b61232c9_PCB.webp" alt="PCB" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/db8231ea9_PSL.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/db8231ea9_PSL.webp" alt="PSL" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ac4f008f9_SV.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ac4f008f9_SV.webp" alt="SV" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/853b18b12_STARSPORTS.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/853b18b12_STARSPORTS.webp" alt="Star Sports" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/97a7658dd_T10.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/97a7658dd_T10.webp" alt="T10" loading="lazy"></div>
+      <div class="logo-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e126ab7e0_TPTWhite.png/v1/fit/w_166,h_40,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e126ab7e0_TPTWhite.webp" alt="TPT" loading="lazy"></div>
     </div>
   </section>
 
-  <!-- ===== VENUES ===== -->
-  <section class="logo-band">
-    <p class="band-label reveal-fade">VENUES</p>
-    <div class="logo-grid">
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/sa.png" alt="SAUDI ARABIA" loading="lazy"><span>SAUDI ARABIA</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/ae.png" alt="UNITED ARAB EMIRATES" loading="lazy"><span>UNITED ARAB EMIRATES</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/om.png" alt="OMAN" loading="lazy"><span>OMAN</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/my.png" alt="MALAYSIA" loading="lazy"><span>MALAYSIA</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/bd.png" alt="BANGLADESH" loading="lazy"><span>BANGLADESH</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/gb.png" alt="UNITED KINGDOM" loading="lazy"><span>UNITED KINGDOM</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/pk.png" alt="PAKISTAN" loading="lazy"><span>PAKISTAN</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/lk.png" alt="SRI LANKA" loading="lazy"><span>SRI LANKA</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/ky.png" alt="CAYMAN ISLANDS" loading="lazy"><span>CAYMAN ISLANDS</span></div>
-      <div class="venue-item reveal-up"><div class="glow"></div><img src="https://flagcdn.com/w320/zw.png" alt="ZIMBABWE" loading="lazy"><span>ZIMBABWE</span></div>
+  <!-- VENUES (grayscale grid, matches trusted-by pattern) -->
+  <section class="py-16 md:py-24">
+    <p class="mb-12 text-center text-[11px] tracking-[0.4em] text-gold">VENUES</p>
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-7 px-6 md:px-12">
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/sa.png" alt="SAUDI ARABIA" loading="lazy"><span>SAUDI ARABIA</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/ae.png" alt="UNITED ARAB EMIRATES" loading="lazy"><span>UNITED ARAB EMIRATES</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/om.png" alt="OMAN" loading="lazy"><span>OMAN</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/my.png" alt="MALAYSIA" loading="lazy"><span>MALAYSIA</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/bd.png" alt="BANGLADESH" loading="lazy"><span>BANGLADESH</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/gb.png" alt="UNITED KINGDOM" loading="lazy"><span>UNITED KINGDOM</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/pk.png" alt="PAKISTAN" loading="lazy"><span>PAKISTAN</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/lk.png" alt="SRI LANKA" loading="lazy"><span>SRI LANKA</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/ky.png" alt="CAYMAN ISLANDS" loading="lazy"><span>CAYMAN ISLANDS</span></div>
+      <div class="venue-cell w-[22vw] sm:w-[14vw] md:w-[12vw]"><img src="https://flagcdn.com/w320/zw.png" alt="ZIMBABWE" loading="lazy"><span>ZIMBABWE</span></div>
     </div>
   </section>
 
-  <!-- ===== BEHIND THE SCENE ===== -->
-  <section class="bts">
-    <h2 class="reveal-up">BEHIND THE SCENE</h2>
-    <div class="bts-grid">
-      <div class="bts-item reveal-up" style="--span:5;--ar:3/4"><img src="assets/images/bts/1.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:4;--ar:4/3"><img src="assets/images/bts/2.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:3;--ar:3/4"><img src="assets/images/bts/3.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:4;--ar:4/3"><img src="assets/images/bts/4.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:5;--ar:3/4"><img src="assets/images/bts/5.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:3;--ar:4/3"><img src="assets/images/bts/6.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:4;--ar:3/4"><img src="assets/images/bts/7.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:5;--ar:4/3"><img src="assets/images/bts/8.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:3;--ar:3/4"><img src="assets/images/bts/9.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:4;--ar:4/3"><img src="assets/images/bts/10.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:5;--ar:3/4"><img src="assets/images/bts/11.jpg" alt="" loading="lazy"></div>
-      <div class="bts-item reveal-up" style="--span:3;--ar:4/3"><img src="assets/images/bts/12.jpg" alt="" loading="lazy"></div>
+  <!-- BEHIND THE SCENE -->
+  <section class="py-28 md:py-40">
+    <h2 class="font-heading text-[clamp(2.2rem,6vw,4.5rem)] font-bold tracking-tight text-center mb-14">BEHIND THE SCENE</h2>
+    <div class="grid grid-cols-2 gap-3 px-4 md:grid-cols-12 md:gap-4 md:px-12">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/530a695e6_1.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/530a695e6_1.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/366b6ff15_2.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/366b6ff15_2.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/027483a71_3.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/027483a71_3.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/66bab5313_4.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/66bab5313_4.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/53a9009fb_5.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/53a9009fb_5.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/45adc892d_6.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/45adc892d_6.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/38680dbf1_7.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/38680dbf1_7.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-1 md:col-span-3 aspect-[269/359]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/1fa7f166f_8.png/v1/fill/w_269,h_359,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/1fa7f166f_8.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-2 md:col-span-6 aspect-[553/738] md:aspect-[553/400]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/3862c0754_9.png/v1/fill/w_553,h_738,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/3862c0754_9.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-2 md:col-span-6 aspect-[553/738] md:aspect-[553/400]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/f13175dd8_10.png/v1/fill/w_553,h_738,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/f13175dd8_10.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-2 md:col-span-6 aspect-[553/415]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/57594b86a_11.png/v1/fill/w_553,h_415,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/57594b86a_11.webp" alt="" loading="lazy">
+      <img class="behind-img col-span-2 md:col-span-6 aspect-[553/415]" src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/dc1de23ee_12.png/v1/fill/w_553,h_415,al_c,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/dc1de23ee_12.webp" alt="" loading="lazy">
     </div>
   </section>
 
-  <!-- ===== FOOTER / CONTACT ===== -->
-  <section class="site-footer">
-    <div class="marquee-wrap">
-      <div class="marquee">
-        <span>LET'S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
-        <span>LET'S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
+  <!-- CONTACT / FOOTER -->
+  <footer class="relative overflow-hidden pt-28 md:pt-40">
+    <div class="relative overflow-hidden pb-20 md:pb-32">
+      <div class="relative">
+        <div class="marquee-drag no-scrollbar flex cursor-grab select-none overflow-x-auto active:cursor-grabbing" id="footerMarquee">
+          <div class="flex shrink-0 whitespace-nowrap marquee-track" id="marqueeTrack">
+            <span class="font-heading text-[clamp(2.5rem,10vw,9rem)] font-bold leading-none tracking-tight">LET&rsquo;S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
+            <span class="font-heading text-[clamp(2.5rem,10vw,9rem)] font-bold leading-none tracking-tight">LET&rsquo;S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
+            <span class="font-heading text-[clamp(2.5rem,10vw,9rem)] font-bold leading-none tracking-tight">LET&rsquo;S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
+            <span class="font-heading text-[clamp(2.5rem,10vw,9rem)] font-bold leading-none tracking-tight">LET&rsquo;S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
+          </div>
+        </div>
+        <button type="button" aria-label="Scroll left" id="marqueeLeft" class="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-sm transition-colors duration-300 hover:border-white/60 md:left-4">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+        <button type="button" aria-label="Scroll right" id="marqueeRight" class="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-sm transition-colors duration-300 hover:border-white/60 md:right-4">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
       </div>
     </div>
-    <div class="footer-inner">
-      <div class="contact-grid">
-        <a class="contact-card reveal-up" href="mailto:biltq@hotmail.com">
-          <div class="contact-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-            <span>biltq@hotmail.com</span>
+
+    <div class="mx-auto max-w-5xl px-6 pb-24 md:px-12">
+      <div class="grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-2">
+        <a href="mailto:biltq@hotmail.com" class="group flex items-center justify-between bg-ink p-8 transition-colors duration-300 hover:bg-white/[0.03] md:p-10">
+          <div class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 transition-colors duration-300 group-hover:text-white"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <span class="font-heading text-base font-medium tracking-tight md:text-lg">biltq@hotmail.com</span>
           </div>
-          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/30 transition-all duration-300 group-hover:rotate-45 group-hover:text-white"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </a>
-        <a class="contact-card reveal-up" href="tel:+923225436059">
-          <div class="contact-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            <span>+92 322 5436059</span>
+        <a href="tel:+923225436059" class="group flex items-center justify-between bg-ink p-8 transition-colors duration-300 hover:bg-white/[0.03] md:p-10">
+          <div class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 transition-colors duration-300 group-hover:text-white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span class="font-heading text-base font-medium tracking-tight md:text-lg">+92 322 5436059</span>
           </div>
-          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/30 transition-all duration-300 group-hover:rotate-45 group-hover:text-white"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </a>
       </div>
-      <div class="social-row">
-        <a class="reveal-up" href="https://www.instagram.com/biltq" target="_blank" rel="noreferrer" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
-        <a class="reveal-up" href="https://www.facebook.com/biltq" target="_blank" rel="noreferrer" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-        <a class="reveal-up" href="https://www.x.com/beelaaltariq" target="_blank" rel="noreferrer" aria-label="X"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
-        <a class="reveal-up" href="https://www.linkedin.com/in/biltq" target="_blank" rel="noreferrer" aria-label="LinkedIn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+
+      <div class="mt-10 flex items-center justify-center gap-6">
+        <a href="https://www.instagram.com/biltq" target="_blank" rel="noopener" class="group transition-colors duration-300" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gold transition-colors duration-300 group-hover:text-white"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+        </a>
+        <a href="https://www.facebook.com/biltq" target="_blank" rel="noopener" class="group transition-colors duration-300" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gold transition-colors duration-300 group-hover:text-white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        </a>
+        <a href="https://www.x.com/beelaaltariq" target="_blank" rel="noopener" class="group transition-colors duration-300" aria-label="X">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="text-gold transition-colors duration-300 group-hover:text-white" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/biltq" target="_blank" rel="noopener" class="group transition-colors duration-300" aria-label="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gold transition-colors duration-300 group-hover:text-white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 BILAL TARIQ</span>
-        <span class="tagline">Every frame should have a purpose.</span>
+
+      <div class="mt-16 flex flex-col items-start justify-between gap-4 text-[11px] tracking-[0.3em] text-white/30 md:flex-row md:items-center">
+        <span>&copy; 2026 BILAL TARIQ</span>
+        <span class="footer-tagline text-base normal-case">Every frame should have a purpose.</span>
       </div>
     </div>
-  </section>
+  </footer>
 
 </main>
-
-<!-- ===== VIDEO LIGHTBOX ===== -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg> CLOSE</button>
-  <div class="lightbox-frame">
-    <iframe id="lightboxIframe" src="" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
 
 <script src="js/main.js"></script>
 </body>
