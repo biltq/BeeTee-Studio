@@ -1,169 +1,212 @@
-(function () {
-  'use strict';
+// ---------- Splash screen ----------
+const splashScreen = document.getElementById('splashScreen');
+if (splashScreen) {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      splashScreen.classList.add('splash-hidden');
+      setTimeout(() => splashScreen.remove(), 700);
+    }, 1200);
+  });
+}
 
-  var isTouch = window.matchMedia('(hover: none), (max-width: 767px)').matches;
+// ---------- Word-by-word reveal for "about" paragraphs ----------
+// Paragraph 1 reveals word-by-word on scroll; paragraph 2 only starts once paragraph 1 finishes.
+const WORD_STAGGER_MS = 35;
 
-  /* ---------------- Custom cursor trail ---------------- */
-  if (!isTouch) {
-    var dots = Array.prototype.slice.call(document.querySelectorAll('.cursor-dot'));
-    var positions = dots.map(function () { return { x: -100, y: -100 }; });
-    var mouse = { x: -100, y: -100 };
-    var hasMoved = false;
+document.querySelectorAll('.word-reveal').forEach((p) => {
+  const words = p.dataset.text.split(' ');
+  const highlights = p.dataset.highlight ? p.dataset.highlight.split(',') : [];
+  p.innerHTML = words.map((w) => {
+    const clean = w.toLowerCase().replace(/[^a-z]/g, '');
+    const cls = highlights.includes(clean) ? 'word-highlight' : '';
+    return `<span class="${cls}">${w}</span>`;
+  }).join(' ');
+});
 
-    window.addEventListener('mousemove', function (e) {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      hasMoved = true;
-    });
+function revealParagraph(p, onDone) {
+  const spans = p.querySelectorAll('span');
+  spans.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * WORD_STAGGER_MS));
+  if (onDone) setTimeout(onDone, spans.length * WORD_STAGGER_MS + 300);
+}
 
-    function animateCursor() {
-      if (hasMoved) {
-        var prevX = mouse.x, prevY = mouse.y;
-        dots.forEach(function (dot, i) {
-          var pos = positions[i];
-          var lerp = i === 0 ? 1 : 0.35;
-          pos.x += (prevX - pos.x) * lerp;
-          pos.y += (prevY - pos.y) * lerp;
-          dot.style.transform = 'translate(' + pos.x + 'px,' + pos.y + 'px) translate(-50%,-50%)';
-          prevX = pos.x;
-          prevY = pos.y;
-        });
+const aboutP1 = document.getElementById('aboutP1');
+const aboutP2 = document.getElementById('aboutP2');
+if (aboutP1) {
+  const p1Observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        revealParagraph(aboutP1, () => { if (aboutP2) revealParagraph(aboutP2); });
+        p1Observer.unobserve(aboutP1);
       }
-      requestAnimationFrame(animateCursor);
+    });
+  }, { threshold: 0.4 });
+  p1Observer.observe(aboutP1);
+}
+
+document.querySelectorAll('.word-reveal').forEach((p) => {
+  if (p.id === 'aboutP1' || p.id === 'aboutP2') return;
+  const spans = p.querySelectorAll('span');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        spans.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * 25));
+        observer.unobserve(p);
+      }
+    });
+  }, { threshold: 0.4 });
+  observer.observe(p);
+});
+
+// ---------- Pinned "I [WORD]" section ----------
+// "I" is static throughout. Each of the 5 words zooms in from 0->1 opacity (with a scale-up),
+// and its paired description text + image fade in on that exact same frame index — all three
+// driven by one continuous scroll progress, so they always move together, never independently.
+const pinSection = document.getElementById('pinServices');
+const frameDesc = document.querySelectorAll('.frame-desc');
+const frameImg = document.querySelectorAll('.frame-img');
+const manifestoWords = document.querySelectorAll('.manifesto-word');
+const frameCount = manifestoWords.length; // 5: PRODUCE / CAPTURE / EDIT / ANIMATE / CREATE
+
+// Each word gets its own dedicated 1-unit window of scroll progress: it enters (rises + fades in),
+// then fully lands and holds, THEN only once it's completely settled does the next word's window
+// begin. No two words are ever mid-entrance at the same time.
+const ENTER_FRAC = 0.25; // first 25% of a word's window: rising in from below
+const EXIT_START = 0.75; // last 25% of a word's window: rising out to fade above
+
+// cp = local progress within this frame's own 1-unit window (<=0 before its turn, >=1 after).
+function frameOpacity(cp) {
+  if (cp <= 0 || cp >= 1) return 0;
+  if (cp < ENTER_FRAC) return cp / ENTER_FRAC;
+  if (cp < EXIT_START) return 1;
+  return 1 - (cp - EXIT_START) / (1 - EXIT_START);
+}
+
+function wordTransform(cp) {
+  if (cp <= 0) return { opacity: 0, y: 60, scale: 0.82 };
+  if (cp < ENTER_FRAC) {
+    const t = cp / ENTER_FRAC;
+    return { opacity: t, y: (1 - t) * 60, scale: 0.82 + 0.18 * t };
+  }
+  if (cp < EXIT_START) return { opacity: 1, y: 0, scale: 1 };
+  if (cp < 1) {
+    const t = (cp - EXIT_START) / (1 - EXIT_START);
+    return { opacity: 1 - t, y: -t * 60, scale: 1 - 0.18 * t };
+  }
+  return { opacity: 0, y: -60, scale: 0.82 };
+}
+
+function updatePinned() {
+  if (!pinSection) return;
+  const rect = pinSection.getBoundingClientRect();
+  const total = rect.height - window.innerHeight;
+  const progress = Math.min(Math.max(-rect.top / total, 0), 1);
+  const v = progress * frameCount;
+
+  manifestoWords.forEach((el, i) => {
+    const { opacity, y, scale } = wordTransform(v - i);
+    el.style.opacity = opacity;
+    el.style.transform = `translateY(${y}px) scale(${scale})`;
+  });
+  // Description + image share the exact same envelope/timing as their paired word, so all three
+  // frame elements always move together.
+  frameDesc.forEach((el, i) => { el.style.opacity = frameOpacity(v - i); });
+  frameImg.forEach((el, i) => { el.style.opacity = frameOpacity(v - i); });
+}
+window.addEventListener('scroll', updatePinned, { passive: true });
+window.addEventListener('resize', updatePinned);
+updatePinned();
+
+// ---------- Generic drag-to-scroll (featured gallery + footer marquee) ----------
+function makeDraggable(el, opts = {}) {
+  if (!el) return;
+  let isDown = false, startX = 0, scrollLeft = 0, moved = false;
+  const start = (x) => {
+    isDown = true; moved = false;
+    el.classList.add('dragging');
+    startX = x - el.offsetLeft;
+    scrollLeft = el.scrollLeft;
+  };
+  const move = (x) => {
+    if (!isDown) return;
+    const walk = x - el.offsetLeft - startX;
+    if (Math.abs(walk) > 5) moved = true;
+    el.scrollLeft = scrollLeft - walk;
+  };
+  const end = () => { isDown = false; el.classList.remove('dragging'); };
+
+  el.addEventListener('mousedown', (e) => start(e.pageX));
+  el.addEventListener('mousemove', (e) => move(e.pageX));
+  window.addEventListener('mouseup', end);
+  el.addEventListener('mouseleave', end);
+  el.addEventListener('touchstart', (e) => start(e.touches[0].pageX), { passive: true });
+  el.addEventListener('touchmove', (e) => move(e.touches[0].pageX), { passive: true });
+  el.addEventListener('touchend', end);
+
+  if (opts.preventClickAfterDrag) {
+    el.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', (e) => { if (moved) e.preventDefault(); });
+    });
+  }
+}
+
+makeDraggable(document.getElementById('dragGallery'), { preventClickAfterDrag: true });
+makeDraggable(document.getElementById('footerMarquee'));
+
+const marqueeEl = document.getElementById('footerMarquee');
+document.getElementById('marqueeLeft')?.addEventListener('click', () => {
+  marqueeEl.scrollBy({ left: -400, behavior: 'smooth' });
+});
+document.getElementById('marqueeRight')?.addEventListener('click', () => {
+  marqueeEl.scrollBy({ left: 400, behavior: 'smooth' });
+});
+
+// ---------- Header hide-on-scroll-down ----------
+let lastY = window.scrollY;
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (header) {
+    header.style.transition = 'transform 0.4s ease';
+    header.style.transform = (y > lastY && y > 200) ? 'translateY(-120%)' : 'translateY(0)';
+  }
+  lastY = y;
+}, { passive: true });
+
+// ---------- Scroll indicator hides as soon as the user scrolls ----------
+const scrollIndicator = document.getElementById('scrollIndicator');
+function updateScrollIndicator() {
+  if (!scrollIndicator) return;
+  scrollIndicator.classList.toggle('scrolled', window.scrollY > 40);
+}
+window.addEventListener('scroll', updateScrollIndicator, { passive: true });
+updateScrollIndicator();
+
+// ---------- Trailing custom cursor (desktop only) ----------
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const dots = Array.from(document.querySelectorAll('.cursor-dot'));
+  const positions = dots.map(() => ({ x: window.innerWidth / 2, y: window.innerHeight / 2 }));
+  let mouseX = positions[0].x, mouseY = positions[0].y;
+  let started = false;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!started) {
+      started = true;
+      document.body.classList.add('cursor-active');
+      positions.forEach((p) => { p.x = mouseX; p.y = mouseY; });
     }
+  });
+
+  function animateCursor() {
+    let x = mouseX, y = mouseY;
+    positions.forEach((p, i) => {
+      p.x += (x - p.x) * 0.35;
+      p.y += (y - p.y) * 0.35;
+      x = p.x; y = p.y;
+      dots[i].style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -50%)`;
+    });
     requestAnimationFrame(animateCursor);
   }
-
-  /* ---------------- Click ripple ---------------- */
-  var rippleLayer = document.querySelector('.ripple-layer');
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('a, button')) return;
-    var ring = document.createElement('span');
-    ring.className = 'ripple-ring';
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-    rippleLayer.appendChild(ring);
-    ring.addEventListener('animationend', function () { ring.remove(); });
-  });
-
-  /* ---------------- Scroll reveal ---------------- */
-  var revealEls = document.querySelectorAll('.reveal-fade, .reveal-up');
-  var revealObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
-  revealEls.forEach(function (el) { revealObserver.observe(el); });
-
-  /* Hero content reveals immediately on load */
-  window.addEventListener('load', function () {
-    document.querySelectorAll('.hero .reveal-fade').forEach(function (el, i) {
-      setTimeout(function () { el.classList.add('is-visible'); }, 300 + i * 250);
-    });
-  });
-
-  /* ---------------- Intro scrollytelling ---------------- */
-  var introSection = document.getElementById('introScroll');
-  var captions = document.querySelectorAll('.intro-caption');
-  var floats = document.querySelectorAll('.intro-float');
-  var words = document.querySelectorAll('.intro-word-cycle span');
-
-  function activeIndexFor(progress, count) {
-    var idx = Math.floor(progress * count);
-    if (idx >= count) idx = count - 1;
-    if (idx < 0) idx = 0;
-    return idx;
-  }
-
-  function updateIntroScroll() {
-    var rect = introSection.getBoundingClientRect();
-    var total = introSection.offsetHeight - window.innerHeight;
-    var scrolled = -rect.top;
-    var progress = total > 0 ? scrolled / total : 0;
-    progress = Math.max(0, Math.min(1, progress));
-
-    if (rect.top > window.innerHeight || rect.bottom < 0) return;
-
-    var capIdx = activeIndexFor(progress, captions.length);
-    captions.forEach(function (el, i) { el.classList.toggle('is-active', i === capIdx); });
-
-    var floatIdx = activeIndexFor(progress, floats.length);
-    floats.forEach(function (el, i) { el.classList.toggle('is-active', i === floatIdx); });
-
-    var wordIdx = activeIndexFor(progress, words.length);
-    words.forEach(function (el, i) { el.classList.toggle('is-active', i === wordIdx); });
-  }
-
-  window.addEventListener('scroll', updateIntroScroll, { passive: true });
-  window.addEventListener('resize', updateIntroScroll);
-  updateIntroScroll();
-
-  /* ---------------- Featured work: drag to scroll ---------------- */
-  var scrollEl = document.getElementById('featuredScroll');
-  var isDown = false, startX, scrollLeft, dragged = false;
-
-  scrollEl.addEventListener('mousedown', function (e) {
-    isDown = true;
-    dragged = false;
-    scrollEl.classList.add('dragging');
-    startX = e.pageX - scrollEl.offsetLeft;
-    scrollLeft = scrollEl.scrollLeft;
-  });
-  window.addEventListener('mouseup', function () {
-    isDown = false;
-    scrollEl.classList.remove('dragging');
-  });
-  scrollEl.addEventListener('mouseleave', function () {
-    isDown = false;
-    scrollEl.classList.remove('dragging');
-  });
-  scrollEl.addEventListener('mousemove', function (e) {
-    if (!isDown) return;
-    e.preventDefault();
-    var x = e.pageX - scrollEl.offsetLeft;
-    var walk = x - startX;
-    if (Math.abs(walk) > 5) dragged = true;
-    scrollEl.scrollLeft = scrollLeft - walk;
-  });
-  /* Prevent click-through firing a video open right after a drag */
-  scrollEl.addEventListener('click', function (e) {
-    if (dragged) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, true);
-
-  /* ---------------- Video lightbox ---------------- */
-  var lightbox = document.getElementById('lightbox');
-  var lightboxIframe = document.getElementById('lightboxIframe');
-  var lightboxClose = document.getElementById('lightboxClose');
-
-  function openLightbox(videoId) {
-    lightboxIframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
-    lightbox.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    lightbox.classList.remove('is-open');
-    lightboxIframe.src = '';
-    document.body.style.overflow = '';
-  }
-
-  document.querySelectorAll('.work-card[data-video]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (dragged) return;
-      openLightbox(btn.getAttribute('data-video'));
-    });
-  });
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', function (e) {
-    if (e.target === lightbox) closeLightbox();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
-  });
-
-})();
+  requestAnimationFrame(animateCursor);
+}
