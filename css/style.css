@@ -69,16 +69,52 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
   50% { opacity: 1; }
 }
 
-/* Reversible scroll reveal for the About section. */
+/* Pinned About section: copy remains centered while scroll drives focus. */
+.about-pin {
+  height: 300svh;
+}
+
+.about-stage {
+  overflow: hidden;
+}
+
+.about-copy {
+  margin-inline: auto;
+  transform: translateY(-1vh);
+}
+
+.word-reveal {
+  font-size: clamp(0.92rem, 1.65vw, 1.7rem);
+  line-height: 1.65;
+}
+
 .word-reveal span {
   display: inline-block;
   opacity: 0;
-  filter: blur(10px);
-  transform: translateY(10px);
+  filter: blur(12px);
+  transform: translateY(8px);
   will-change: opacity, filter, transform;
 }
-.word-reveal span.word-highlight { color: #f3c005; font-weight: 700; }
-.about-section { min-height: 82svh; display: flex; align-items: center; }
+
+.word-reveal span.word-highlight {
+  color: #f3c005;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .about-pin {
+    height: 340svh;
+  }
+
+  .about-copy {
+    transform: none;
+  }
+
+  .word-reveal {
+    font-size: clamp(0.8rem, 3.5vw, 1.05rem);
+    line-height: 1.6;
+  }
+}
 
 /* pinned "I [WORD]" section: I is static; each word zooms in, and at full opacity its
    paired description + image are also fully visible (all three driven by the same frame index). */
@@ -267,4 +303,20 @@ header {
   .manifesto-word-box {
     width: 8.7ch;
   }
+}
+
+
+/* Header logo remains fully visible from the first frame onward. */
+.header-inner {
+  overflow: visible;
+}
+
+.header-logo {
+  flex: 0 0 auto;
+  transform: translateY(0);
+}
+
+.header-logo img {
+  opacity: 1;
+  visibility: visible;
 }
