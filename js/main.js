@@ -44,37 +44,44 @@ function updateAboutReveal() {
   if (!aboutSection || aboutWords.length === 0) return;
 
   const rect = aboutSection.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
   const scrollableDistance = Math.max(
-    aboutSection.offsetHeight - window.innerHeight,
+    aboutSection.offsetHeight - viewportHeight,
     1
   );
-  const progress = clamp(-rect.top / scrollableDistance);
 
-  const revealPhase = smoothstep(0.02, 0.34, progress);
-  const exitPhase = smoothstep(0.76, 0.98, progress);
+  // Reveal starts while the hero is still visible.
+  const approachStart = viewportHeight * 0.72;
+  const approachProgress = clamp(
+    1 - ((rect.top - viewportHeight * 0.08) / approachStart)
+  );
+
+  const pinnedProgress = rect.top <= 0
+    ? clamp(-rect.top / scrollableDistance)
+    : 0;
+
+  // By the time the section pins, roughly half the paragraph is already focused.
+  const revealProgress = rect.top > 0
+    ? approachProgress * 0.48
+    : clamp(0.48 + pinnedProgress * 1.35);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
       ? 0
       : index / (aboutWords.length - 1);
 
-    const staggeredReveal = smoothstep(
-      wordPosition * 0.24,
-      0.22 + (wordPosition * 0.24),
-      revealPhase
+    // Each word gets its own short focus window.
+    const focus = smoothstep(
+      wordPosition * 0.92,
+      wordPosition * 0.92 + 0.075,
+      revealProgress
     );
 
-    const staggeredExit = smoothstep(
-      wordPosition * 0.12,
-      0.45 + (wordPosition * 0.12),
-      exitPhase
-    );
+    const opacity = 0.08 + focus * 0.92;
+    const blur = (1 - focus) * 11;
+    const translateY = (1 - focus) * 4;
 
-    const visibility = clamp(staggeredReveal * (1 - staggeredExit));
-    const blur = (1 - visibility) * 12;
-    const translateY = (1 - visibility) * 8;
-
-    word.style.opacity = visibility.toFixed(3);
+    word.style.opacity = opacity.toFixed(3);
     word.style.filter = `blur(${blur.toFixed(2)}px)`;
     word.style.transform = `translateY(${translateY.toFixed(2)}px)`;
   });
@@ -129,7 +136,7 @@ function updatePinned() {
   const viewportHeight = window.innerHeight;
   const total = Math.max(rect.height - viewportHeight, 1);
 
-  const previewStart = viewportHeight * 0.72;
+  const previewStart = viewportHeight * 1.08;
   const previewProgress = rect.top > 0
     ? clamp(1 - (rect.top / previewStart))
     : 1;
@@ -140,7 +147,7 @@ function updatePinned() {
 
   // PRODUCE reaches roughly half visibility as the section approaches,
   // then continues from that exact state without resetting.
-  const entryProgress = ENTER_FRAC * 0.52;
+  const entryProgress = ENTER_FRAC * 0.62;
   const frameProgress = rect.top > 0
     ? entryProgress * previewProgress
     : entryProgress + (pinnedProgress * (frameCount - entryProgress));
