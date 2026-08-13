@@ -443,3 +443,20 @@ header {
   position: relative;
   z-index: 5;
 }
+
+
+/* Contact accent */
+.contact-email-accent {
+  color: #f3c005;
+}
+
+footer a[href^="mailto:"],
+footer a[href^="tel:"],
+footer .contact-link {
+  border-color: #f3c005 !important;
+}
+
+
+footer :is(.border, .border-white\/10, .border-white\/20):has(a[href^="mailto:"]) {
+  border-color: #f3c005 !important;
+}
