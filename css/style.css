@@ -73,7 +73,7 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 .about-pin {
   position: relative;
   z-index: 15;
-  height: 116svh;
+  height: 160svh;
   margin-top: 0;
 }
 
@@ -107,12 +107,12 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 @media (max-width: 767px) {
   .about-pin {
-    height: 121svh;
+    height: 165svh;
     margin-top: 0;
   }
 
   .about-copy {
-    transform: translateY(-5svh);
+    transform: translateY(-2svh);
   }
 
   .word-reveal {
