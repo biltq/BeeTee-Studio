@@ -510,6 +510,14 @@
 
   <!-- CONTACT / FOOTER -->
   <footer class="relative overflow-hidden pt-28 md:pt-40">
+    <div class="footer-scroll-cue" aria-hidden="true">
+      <span>SCROLL</span>
+      <div class="footer-scroll-chevrons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </div>
+    </div>
     <div class="relative overflow-hidden pb-20 md:pb-32">
       <div class="relative">
         <div class="marquee-drag no-scrollbar flex cursor-grab select-none overflow-x-auto active:cursor-grabbing" id="footerMarquee">
@@ -520,12 +528,6 @@
             <span class="font-heading text-[clamp(2.5rem,10vw,9rem)] font-bold leading-none tracking-tight">LET&rsquo;S CREATE SOMETHING WORTH WATCHING.&nbsp;&nbsp;</span>
           </div>
         </div>
-        <button type="button" aria-label="Scroll left" id="marqueeLeft" class="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-sm transition-colors duration-300 hover:border-white/60 md:left-4">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-        </button>
-        <button type="button" aria-label="Scroll right" id="marqueeRight" class="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-sm transition-colors duration-300 hover:border-white/60 md:right-4">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-        </button>
       </div>
     </div>
 
