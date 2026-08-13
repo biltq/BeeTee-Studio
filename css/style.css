@@ -73,7 +73,7 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 .about-pin {
   position: relative;
   z-index: 15;
-  height: 155svh;
+  height: 132svh;
   margin-top: 0;
 }
 
@@ -84,7 +84,7 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 .about-copy {
   margin-inline: auto;
-  transform: translateY(-13svh);
+  transform: translateY(-22svh);
 }
 
 .word-reveal {
@@ -107,12 +107,12 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 @media (max-width: 767px) {
   .about-pin {
-    height: 170svh;
+    height: 142svh;
     margin-top: 0;
   }
 
   .about-copy {
-    transform: translateY(-8svh);
+    transform: translateY(-15svh);
   }
 
   .word-reveal {
@@ -156,7 +156,6 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 .feature-card { scroll-snap-align: center; }
 .drag-gallery { cursor: grab; }
 .drag-gallery.dragging { cursor: grabbing; }
-.drag-gallery.dragging [data-card] { pointer-events: none; }
 
 /* film-strip sprocket columns flanking the gallery */
 .sprocket-strip {
@@ -339,76 +338,108 @@ header {
 
 
 
-/* Viewport-focus treatment for galleries. */
-[data-card],
+/* Viewport-center focus treatment for galleries. */
+.feature-card,
 .reel-card,
 .behind-img {
   transition:
-    filter 0.35s ease,
-    opacity 0.35s ease,
-    transform 0.35s ease;
+    filter 0.42s ease,
+    opacity 0.42s ease,
+    transform 0.42s ease;
   will-change: filter, opacity, transform;
 }
 
-[data-card].viewport-focus,
+[data-card].viewport-focus .feature-card,
 .reel-card.viewport-focus,
 .behind-img.viewport-focus {
   filter: blur(0);
   opacity: 1;
 }
 
-[data-card].viewport-soft,
+[data-card].viewport-soft .feature-card,
 .reel-card.viewport-soft,
 .behind-img.viewport-soft {
-  filter: blur(4px);
+  filter: blur(1.5px);
+  opacity: 0.82;
+}
+
+[data-card].viewport-blur .feature-card,
+.reel-card.viewport-blur,
+.behind-img.viewport-blur {
+  filter: blur(3.5px);
   opacity: 0.62;
 }
 
-[data-card].viewport-blur,
-.reel-card.viewport-blur,
-.behind-img.viewport-blur {
-  filter: blur(8px);
-  opacity: 0.35;
-}
 
-/* Gold directional arrows around the footer marquee. */
-.footer-marquee-wrap::before,
-.footer-marquee-wrap::after {
+
+/* Footer directional chevrons beside LET'S CREATE. */
+.footer-marquee-arrow {
   position: absolute;
-  top: -3.25rem;
-  z-index: 5;
+  top: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: center;
   color: #f3c005;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: clamp(1.7rem, 3vw, 2.7rem);
-  font-weight: 300;
-  letter-spacing: -0.12em;
-  line-height: 1;
-  opacity: 0.95;
+  transform: translateY(-50%);
   pointer-events: none;
+  opacity: 1;
 }
 
-.footer-marquee-wrap::before {
-  left: 1.5rem;
-  content: "‹ ‹ ‹";
+.footer-marquee-arrow-left {
+  left: clamp(0.35rem, 1vw, 1rem);
 }
 
-.footer-marquee-wrap::after {
-  right: 1.5rem;
-  content: "› › ›";
+.footer-marquee-arrow-right {
+  right: clamp(0.35rem, 1vw, 1rem);
+}
+
+.footer-marquee-arrow svg {
+  width: clamp(2.1rem, 3.8vw, 3.8rem);
+  height: clamp(2.1rem, 3.8vw, 3.8rem);
+  margin-inline: -0.55rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: footer-chevron-pulse 1.35s ease-in-out infinite;
+}
+
+.footer-marquee-arrow svg:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.footer-marquee-arrow svg:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes footer-chevron-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+.footer-marquee-wrap {
+  overflow: visible;
 }
 
 @media (max-width: 767px) {
-  .footer-marquee-wrap::before,
-  .footer-marquee-wrap::after {
-    top: -2.6rem;
-    font-size: 1.8rem;
+  .footer-marquee-arrow-left {
+    left: 0.25rem;
   }
 
-  .footer-marquee-wrap::before {
-    left: 0.8rem;
+  .footer-marquee-arrow-right {
+    right: 0.25rem;
   }
 
-  .footer-marquee-wrap::after {
-    right: 0.8rem;
+  .footer-marquee-arrow svg {
+    width: 2.15rem;
+    height: 2.15rem;
   }
+}
+}
+
+
+.footer-marquee-wrap .marquee-drag {
+  position: relative;
+  z-index: 5;
 }
