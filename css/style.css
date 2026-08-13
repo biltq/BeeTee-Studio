@@ -460,3 +460,42 @@ footer .contact-link {
 footer :is(.border, .border-white\/10, .border-white\/20):has(a[href^="mailto:"]) {
   border-color: #f3c005 !important;
 }
+
+
+/* Muted Featured Work preview: only the active centered card receives an iframe. */
+.feature-card {
+  isolation: isolate;
+}
+
+.feature-preview {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  background: #050505;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.feature-preview.is-playing {
+  opacity: 1;
+}
+
+.feature-preview iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 177.78%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
+.feature-card .play-icon,
+.feature-card > .absolute {
+  z-index: 4;
+}
