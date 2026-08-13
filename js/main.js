@@ -51,7 +51,7 @@ function updateAboutReveal() {
   );
 
   const entryProgress = clamp(
-    (viewportHeight * 0.18 - rect.top) / (viewportHeight * 0.18)
+    (viewportHeight * 0.60 - rect.top) / (viewportHeight * 0.60)
   );
 
   const pinnedProgress = rect.top <= 0
@@ -59,8 +59,8 @@ function updateAboutReveal() {
     : 0;
 
   const revealProgress = rect.top > 0
-    ? entryProgress * 0.10
-    : clamp(0.10 + pinnedProgress * 3.15);
+    ? entryProgress * 0.24
+    : clamp(0.24 + pinnedProgress * 5.10);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
