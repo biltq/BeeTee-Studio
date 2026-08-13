@@ -59,8 +59,8 @@ function updateAboutReveal() {
     : 0;
 
   const revealProgress = rect.top > 0
-    ? entryProgress * 0.24
-    : clamp(0.24 + pinnedProgress * 5.10);
+    ? entryProgress * 0.18
+    : clamp(0.18 + pinnedProgress * 0.92);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
@@ -68,8 +68,8 @@ function updateAboutReveal() {
       : index / (aboutWords.length - 1);
 
     const focus = smoothstep(
-      wordPosition * 0.92,
-      wordPosition * 0.92 + 0.075,
+      wordPosition * 0.90,
+      wordPosition * 0.90 + 0.11,
       revealProgress
     );
 
@@ -172,73 +172,47 @@ updatePinned();
 function makeDraggable(el, opts = {}) {
   if (!el) return;
 
-  let pointerDown = false;
+  let isDragging = false;
   let startX = 0;
-  let startY = 0;
   let startScrollLeft = 0;
-  let horizontalDrag = false;
-  let suppressNextClick = false;
+  let moved = false;
 
-  const dragThreshold = opts.dragThreshold ?? 14;
+  const dragThreshold = opts.dragThreshold ?? 10;
 
-  el.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+  el.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) return;
 
-    pointerDown = true;
-    horizontalDrag = false;
+    isDragging = true;
+    moved = false;
     startX = event.clientX;
-    startY = event.clientY;
     startScrollLeft = el.scrollLeft;
     el.classList.add('dragging');
-
-    if (el.setPointerCapture) {
-      el.setPointerCapture(event.pointerId);
-    }
   });
 
-  el.addEventListener('pointermove', (event) => {
-    if (!pointerDown) return;
+  window.addEventListener('mousemove', (event) => {
+    if (!isDragging) return;
 
     const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
 
-    if (
-      !horizontalDrag &&
-      Math.abs(deltaX) > dragThreshold &&
-      Math.abs(deltaX) > Math.abs(deltaY)
-    ) {
-      horizontalDrag = true;
-    }
-
-    if (horizontalDrag) {
-      suppressNextClick = true;
+    if (Math.abs(deltaX) >= dragThreshold) {
+      moved = true;
       el.scrollLeft = startScrollLeft - deltaX;
       event.preventDefault();
     }
   });
 
-  const endDrag = (event) => {
-    if (!pointerDown) return;
-    pointerDown = false;
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
     el.classList.remove('dragging');
-
-    if (el.releasePointerCapture && el.hasPointerCapture?.(event.pointerId)) {
-      el.releasePointerCapture(event.pointerId);
-    }
-
-    horizontalDrag = false;
-  };
-
-  el.addEventListener('pointerup', endDrag);
-  el.addEventListener('pointercancel', endDrag);
+  });
 
   if (opts.preventClickAfterDrag) {
     el.addEventListener(
       'click',
       (event) => {
-        if (!suppressNextClick) return;
+        if (!moved) return;
 
-        suppressNextClick = false;
+        moved = false;
         event.preventDefault();
         event.stopPropagation();
       },
@@ -249,7 +223,7 @@ function makeDraggable(el, opts = {}) {
 
 makeDraggable(document.getElementById('dragGallery'), {
   preventClickAfterDrag: true,
-  dragThreshold: 14,
+  dragThreshold: 10,
 });
 makeDraggable(document.getElementById('footerMarquee'));
 
