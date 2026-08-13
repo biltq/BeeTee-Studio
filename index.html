@@ -20,6 +20,17 @@
   }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<noscript><style>#splashScreen{display:none!important}</style></noscript>
+<script>
+  window.setTimeout(function () {
+    var splash = document.getElementById('splashScreen');
+    if (splash) {
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+      window.setTimeout(function () { splash.remove(); }, 700);
+    }
+  }, 5000);
+</script>
 </head>
 <body class="bg-ink text-white font-body overflow-x-hidden">
 
@@ -63,13 +74,13 @@
 
 <!-- HEADER -->
 <header class="fixed inset-x-0 top-0 z-50">
-  <div class="relative flex h-14 items-center justify-center px-5 md:h-16 md:px-8">
+  <div class="header-inner relative flex h-20 items-center justify-center px-5 md:h-28 md:px-8">
     <div class="absolute left-5 flex items-center gap-2 md:left-8">
       <span class="h-2 w-2 rounded-full bg-[#ff3030] animate-rec"></span>
       <span class="text-[10px] tracking-[0.35em] text-white/60">REC</span>
     </div>
     <span class="header-logo inline-block relative h-[4.5rem] md:h-[6rem]" style="aspect-ratio: 161 / 95;">
-      <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.png/v1/fit/w_250,h_96,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="BeeTee Studio">
+      <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.png/v1/fit/w_250,h_96,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.webp" loading="eager" fetchpriority="high" class="w-full h-full inset-0 absolute object-contain" alt="BeeTee Studio">
     </span>
     <div class="absolute right-5 text-[10px] tracking-[0.35em] text-white/40 md:right-8">BT &middot; 2026</div>
   </div>
@@ -98,14 +109,16 @@
     </div>
   </section>
 
-  <!-- ABOUT (word-stagger reveal) -->
-  <section class="about-section px-6 py-28 md:py-36" id="aboutSection">
-    <div class="mx-auto max-w-3xl text-left">
-      <p class="word-reveal font-body text-base uppercase leading-relaxed md:text-xl md:leading-relaxed" id="aboutP1"
-         data-text="From designing real-time graphics, to framing the cities that shape a broadcast&rsquo;s look and adds color, to producing stories from the heart of live games and animating the graphics that give it all its pulse."></p>
-      <p class="word-reveal mt-8 font-body text-base uppercase leading-relaxed text-white/50 md:text-xl md:leading-relaxed" id="aboutP2"
-         data-text="BeeTee Studio is where production, editing, animation, and design come together, built around getting every frame right."
-         data-highlight="beetee,studio,production,editing,animation,design"></p>
+  <!-- ABOUT: pinned, reversible focus/defocus reveal -->
+  <section class="about-pin relative" id="aboutSection">
+    <div class="about-stage sticky top-0 flex h-[100svh] w-full items-center justify-center px-6">
+      <div class="about-copy w-full max-w-5xl text-left">
+        <p class="word-reveal font-body uppercase leading-relaxed" id="aboutP1"
+           data-text="From designing real-time graphics, to framing the cities that shape a broadcast&rsquo;s look and adds color, to producing stories from the heart of live games and animating the graphics that give it all its pulse."></p>
+        <p class="word-reveal mt-8 font-body uppercase leading-relaxed text-white/50" id="aboutP2"
+           data-text="BeeTee Studio is where production, editing, animation, and design come together, built around getting every frame right."
+           data-highlight="beetee,studio,production,editing,animation,design"></p>
+      </div>
     </div>
   </section>
 
