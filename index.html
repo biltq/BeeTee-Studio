@@ -21,22 +21,12 @@
 </script>
 <link rel="stylesheet" href="css/style.css">
 <noscript><style>#splashScreen{display:none!important}</style></noscript>
-<script>
-  window.setTimeout(function () {
-    var splash = document.getElementById('splashScreen');
-    if (splash) {
-      splash.style.opacity = '0';
-      splash.style.pointerEvents = 'none';
-      window.setTimeout(function () { splash.remove(); }, 700);
-    }
-  }, 5000);
-</script>
 </head>
 <body class="bg-ink text-white font-body overflow-x-hidden">
 
 <!-- SPLASH SCREEN -->
 <div id="splashScreen" class="fixed inset-0 z-[200] flex items-center justify-center bg-ink">
-  <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/48b2825d9_BEETEE_LOGO_HOR_MAIN.png/v1/fit/w_885,h_346,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/48b2825d9_BEETEE_LOGO_HOR_MAIN.webp" alt="BeeTee Studio" class="splash-logo w-[52vw] max-w-[280px]">
+  <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/48b2825d9_BEETEE_LOGO_HOR_MAIN.png/v1/fit/w_885,h_346,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/48b2825d9_BEETEE_LOGO_HOR_MAIN.webp" alt="BeeTee Studio" loading="eager" fetchpriority="high" class="splash-logo w-[52vw] max-w-[280px]">
 </div>
 
 <div class="grain-overlay" aria-hidden="true">
@@ -92,7 +82,7 @@
   <section class="relative h-[100svh] w-full overflow-hidden">
     <div class="absolute inset-0">
       <div class="hero-video-wrap">
-        <iframe src="https://player.vimeo.com/video/1214439194?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1" title="Showreel" allow="autoplay; fullscreen" class="hero-video" frameborder="0"></iframe>
+        <iframe id="heroVimeo" src="https://player.vimeo.com/video/1214439194?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1" title="Showreel" allow="autoplay; fullscreen; picture-in-picture" class="hero-video" frameborder="0"></iframe></iframe>
       </div>
       <div class="absolute inset-0 bg-black/55"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#050505]"></div>
@@ -134,22 +124,22 @@
 
       <div class="frame-img services-image absolute z-10" data-frame="0">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
-          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e6139abf3_generated_6e7a65cb.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e6139abf3_generated_6e7a65cb.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+          <img src="assets/float-1.png" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
       <div class="frame-img services-image absolute z-10" data-frame="1">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
-          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/815fb11c8_generated_3c4ff988.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/815fb11c8_generated_3c4ff988.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+          <img src="assets/float-2.png" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
       <div class="frame-img services-image absolute z-10" data-frame="2">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
-          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/33b0d13e1_generated_3cffcb13.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/33b0d13e1_generated_3cffcb13.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+          <img src="assets/float-3.png" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
       <div class="frame-img services-image absolute z-10" data-frame="3">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
-          <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ff228de69_generated_3d97101c.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ff228de69_generated_3d97101c.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
+          <img src="assets/float-4.png" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
 
@@ -181,7 +171,7 @@
       <div class="drag-gallery no-scrollbar flex flex-1 gap-4 overflow-x-auto py-2 md:gap-5 snap-x" id="dragGallery">
         <!-- 01 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/T1WFoAyYKUM" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/T1WFoAyYKUM" target="_blank" rel="noopener" data-youtube-id="T1WFoAyYKUM">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/T1WFoAyYKUM/maxresdefault.jpg" class="w-full h-full object-cover" alt="ICC Men's T20 World Cup 2026" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -195,7 +185,7 @@
 
         <!-- 02 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/-JiuvHEqhE8" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/-JiuvHEqhE8" target="_blank" rel="noopener" data-youtube-id="-JiuvHEqhE8">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/-JiuvHEqhE8/maxresdefault.jpg" class="w-full h-full object-cover" alt="ICC Champions Trophy 2025" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -219,7 +209,7 @@
 
         <!-- 04 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Sa_oEoVlzt4" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Sa_oEoVlzt4" target="_blank" rel="noopener" data-youtube-id="Sa_oEoVlzt4">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Sa_oEoVlzt4/maxresdefault.jpg" class="w-full h-full object-cover" alt="First Test" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -231,7 +221,7 @@
 
         <!-- 05 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Qd7g-AlgDOc" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Qd7g-AlgDOc" target="_blank" rel="noopener" data-youtube-id="Qd7g-AlgDOc">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Qd7g-AlgDOc/maxresdefault.jpg" class="w-full h-full object-cover" alt="Broadcast Packaging" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -243,7 +233,7 @@
 
         <!-- 06 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/2KzMDLHWAEQ" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/2KzMDLHWAEQ" target="_blank" rel="noopener" data-youtube-id="2KzMDLHWAEQ">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/2KzMDLHWAEQ/maxresdefault.jpg" class="w-full h-full object-cover" alt="Motion Graphics & VFX" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -255,7 +245,7 @@
 
         <!-- 07 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/QEEjbbZdgOs" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/QEEjbbZdgOs" target="_blank" rel="noopener" data-youtube-id="QEEjbbZdgOs">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/QEEjbbZdgOs/maxresdefault.jpg" class="w-full h-full object-cover" alt="DP World ILT20 2025-26" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -267,7 +257,7 @@
 
         <!-- 08 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/aVsvlc29ENs" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/aVsvlc29ENs" target="_blank" rel="noopener" data-youtube-id="aVsvlc29ENs">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/aVsvlc29ENs/maxresdefault.jpg" class="w-full h-full object-cover" alt="Final Match - BPL 2026" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -279,7 +269,7 @@
 
         <!-- 09 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/e5gmNXISIXo" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/e5gmNXISIXo" target="_blank" rel="noopener" data-youtube-id="e5gmNXISIXo">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/e5gmNXISIXo/maxresdefault.jpg" class="w-full h-full object-cover" alt="Abu Dhabi T10 2025" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -291,7 +281,7 @@
 
         <!-- 10 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/A2vqYaAKEho" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/A2vqYaAKEho" target="_blank" rel="noopener" data-youtube-id="A2vqYaAKEho">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/A2vqYaAKEho/maxresdefault.jpg" class="w-full h-full object-cover" alt="ACC Emerging Cup 2024" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -303,7 +293,7 @@
 
         <!-- 11 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/AoOO5jAhJok" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/AoOO5jAhJok" target="_blank" rel="noopener" data-youtube-id="AoOO5jAhJok">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/AoOO5jAhJok/maxresdefault.jpg" class="w-full h-full object-cover" alt="Dickwella & Tanvi at Spartan" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -315,7 +305,7 @@
 
         <!-- 12 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/x5ldklM48oQ" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/x5ldklM48oQ" target="_blank" rel="noopener" data-youtube-id="x5ldklM48oQ">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/x5ldklM48oQ/maxresdefault.jpg" class="w-full h-full object-cover" alt="The Pitch Masters" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -327,7 +317,7 @@
 
         <!-- 13 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/s84UpCpTLAI" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/s84UpCpTLAI" target="_blank" rel="noopener" data-youtube-id="s84UpCpTLAI">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/s84UpCpTLAI/maxresdefault.jpg" class="w-full h-full object-cover" alt="Victoria Falls ft. Karishma" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -339,7 +329,7 @@
 
         <!-- 14 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Qek9_gzTyrY" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/Qek9_gzTyrY" target="_blank" rel="noopener" data-youtube-id="Qek9_gzTyrY">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/Qek9_gzTyrY/maxresdefault.jpg" class="w-full h-full object-cover" alt="Wild is Life ft Erin" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -351,7 +341,7 @@
 
         <!-- 15 -->
         <div class="shrink-0 snap-center w-[86vw] md:w-[62vw]" data-card>
-          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/bi8QLLTMGB4" target="_blank" rel="noopener">
+          <a class="feature-card group relative block aspect-video w-full md:h-[58vh] md:aspect-auto overflow-hidden rounded-2xl border bg-white/5" href="https://youtu.be/bi8QLLTMGB4" target="_blank" rel="noopener" data-youtube-id="bi8QLLTMGB4">
             <span class="thumb-zoom block h-full w-full"><img src="https://img.youtube.com/vi/bi8QLLTMGB4/maxresdefault.jpg" class="w-full h-full object-cover" alt="Babar Azam's Home" loading="lazy"></span>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             <div class="play-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
@@ -575,6 +565,7 @@
 
 </main>
 
+<script src="https://player.vimeo.com/api/player.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
