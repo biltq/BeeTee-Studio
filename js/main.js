@@ -1,12 +1,53 @@
-// ---------- Splash screen ----------
+// ---------- Splash screen: reveal only when the hero is actually playing ----------
 const splashScreen = document.getElementById('splashScreen');
+const heroVimeo = document.getElementById('heroVimeo');
+
+function hideSplash() {
+  if (!splashScreen || splashScreen.dataset.dismissed === 'true') return;
+
+  splashScreen.dataset.dismissed = 'true';
+  splashScreen.classList.add('splash-hidden');
+
+  window.setTimeout(() => {
+    splashScreen.remove();
+  }, 700);
+}
+
 if (splashScreen) {
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      splashScreen.classList.add('splash-hidden');
-      setTimeout(() => splashScreen.remove(), 700);
-    }, 1200);
-  });
+  let heroConfirmedPlaying = false;
+
+  const dismissAfterHeroStarts = () => {
+    if (heroConfirmedPlaying) return;
+    heroConfirmedPlaying = true;
+
+    // Small cinematic hold avoids revealing a half-painted first frame.
+    window.setTimeout(hideSplash, 400);
+  };
+
+  if (heroVimeo && window.Vimeo?.Player) {
+    const heroPlayer = new Vimeo.Player(heroVimeo);
+
+    heroPlayer.on('play', dismissAfterHeroStarts);
+    heroPlayer.on('playing', dismissAfterHeroStarts);
+    heroPlayer.on('timeupdate', (data) => {
+      if (data.seconds > 0.08) {
+        dismissAfterHeroStarts();
+      }
+    });
+
+    heroPlayer.ready()
+      .then(() => heroPlayer.play())
+      .catch(() => {
+        // Background autoplay may be controlled by the browser; the failsafe below still applies.
+      });
+  } else {
+    window.addEventListener('load', () => {
+      window.setTimeout(hideSplash, 700);
+    }, { once: true });
+  }
+
+  // Never trap a visitor behind the loader if Vimeo/network/autoplay fails.
+  window.setTimeout(hideSplash, 8000);
 }
 
 // ---------- Pinned reversible About reveal ----------
@@ -374,3 +415,117 @@ window.addEventListener('scroll', updateGalleryFocus, { passive: true });
 window.addEventListener('resize', updateGalleryFocus);
 dragGallery?.addEventListener('scroll', updateGalleryFocus, { passive: true });
 updateGalleryFocus();
+
+
+// ---------- Featured Work: one muted preview on the centered card ----------
+const previewEligibleCards = Array.from(
+  document.querySelectorAll('.feature-card[data-youtube-id]')
+);
+
+let activePreviewCard = null;
+let activePreviewElement = null;
+let previewSwitchTimer = 0;
+
+function destroyFeaturedPreview() {
+  window.clearTimeout(previewSwitchTimer);
+
+  if (activePreviewElement) {
+    activePreviewElement.remove();
+  }
+
+  activePreviewElement = null;
+  activePreviewCard = null;
+}
+
+function startFeaturedPreview(card) {
+  if (!card || activePreviewCard === card) return;
+
+  destroyFeaturedPreview();
+
+  const videoId = card.dataset.youtubeId;
+  if (!videoId) return;
+
+  activePreviewCard = card;
+
+  previewSwitchTimer = window.setTimeout(() => {
+    if (activePreviewCard !== card) return;
+
+    const preview = document.createElement('span');
+    preview.className = 'feature-preview';
+
+    const iframe = document.createElement('iframe');
+    iframe.src =
+      `https://www.youtube.com/embed/${encodeURIComponent(videoId)}` +
+      '?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&loop=1' +
+      `&playlist=${encodeURIComponent(videoId)}`;
+    iframe.title = 'Muted video preview';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+    iframe.loading = 'eager';
+    iframe.tabIndex = -1;
+
+    preview.appendChild(iframe);
+    card.prepend(preview);
+    activePreviewElement = preview;
+
+    requestAnimationFrame(() => {
+      preview.classList.add('is-playing');
+    });
+  }, 180);
+}
+
+function updateFocusedFeaturedPreview() {
+  if (previewEligibleCards.length === 0) return;
+
+  const viewportCenterX = window.innerWidth / 2;
+
+  let nearestCard = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  previewEligibleCards.forEach((card) => {
+    const rect = card.getBoundingClientRect();
+
+    const isOnScreen =
+      rect.right > 0 &&
+      rect.left < window.innerWidth &&
+      rect.bottom > 0 &&
+      rect.top < window.innerHeight;
+
+    if (!isOnScreen) return;
+
+    const centerX = rect.left + rect.width / 2;
+    const distance = Math.abs(centerX - viewportCenterX);
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestCard = card;
+    }
+  });
+
+  if (!nearestCard) {
+    destroyFeaturedPreview();
+    return;
+  }
+
+  // Prevent previews from starting when Featured Work is only barely in view.
+  const rect = nearestCard.getBoundingClientRect();
+  const visibleTop = Math.max(rect.top, 0);
+  const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+  const visibleHeight = Math.max(visibleBottom - visibleTop, 0);
+  const visibleRatio = visibleHeight / Math.max(rect.height, 1);
+
+  if (visibleRatio < 0.38) {
+    destroyFeaturedPreview();
+    return;
+  }
+
+  startFeaturedPreview(nearestCard);
+}
+
+window.addEventListener('scroll', updateFocusedFeaturedPreview, { passive: true });
+window.addEventListener('resize', updateFocusedFeaturedPreview);
+dragGallery?.addEventListener(
+  'scroll',
+  updateFocusedFeaturedPreview,
+  { passive: true }
+);
+updateFocusedFeaturedPreview();
