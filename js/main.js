@@ -50,27 +50,23 @@ function updateAboutReveal() {
     1
   );
 
-  // Reveal starts while the hero is still visible.
-  const approachStart = viewportHeight * 0.72;
-  const approachProgress = clamp(
-    1 - ((rect.top - viewportHeight * 0.08) / approachStart)
+  const entryProgress = clamp(
+    (viewportHeight * 0.18 - rect.top) / (viewportHeight * 0.18)
   );
 
   const pinnedProgress = rect.top <= 0
     ? clamp(-rect.top / scrollableDistance)
     : 0;
 
-  // By the time the section pins, roughly half the paragraph is already focused.
   const revealProgress = rect.top > 0
-    ? approachProgress * 0.48
-    : clamp(0.48 + pinnedProgress * 1.35);
+    ? entryProgress * 0.10
+    : clamp(0.10 + pinnedProgress * 1.55);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
       ? 0
       : index / (aboutWords.length - 1);
 
-    // Each word gets its own short focus window.
     const focus = smoothstep(
       wordPosition * 0.92,
       wordPosition * 0.92 + 0.075,
@@ -209,12 +205,6 @@ makeDraggable(document.getElementById('dragGallery'), { preventClickAfterDrag: t
 makeDraggable(document.getElementById('footerMarquee'));
 
 const marqueeEl = document.getElementById('footerMarquee');
-document.getElementById('marqueeLeft')?.addEventListener('click', () => {
-  marqueeEl.scrollBy({ left: -400, behavior: 'smooth' });
-});
-document.getElementById('marqueeRight')?.addEventListener('click', () => {
-  marqueeEl.scrollBy({ left: 400, behavior: 'smooth' });
-});
 
 // ---------- Persistent header + scroll indicator ----------
 const scrollIndicator = document.getElementById('scrollIndicator');
