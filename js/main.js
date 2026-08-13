@@ -60,7 +60,7 @@ function updateAboutReveal() {
 
   const revealProgress = rect.top > 0
     ? entryProgress * 0.10
-    : clamp(0.10 + pinnedProgress * 1.55);
+    : clamp(0.10 + pinnedProgress * 2.10);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
@@ -171,37 +171,84 @@ updatePinned();
 // ---------- Generic drag-to-scroll (featured gallery + footer marquee) ----------
 function makeDraggable(el, opts = {}) {
   if (!el) return;
-  let isDown = false, startX = 0, scrollLeft = 0, moved = false;
-  const start = (x) => {
-    isDown = true; moved = false;
-    el.classList.add('dragging');
-    startX = x - el.offsetLeft;
-    scrollLeft = el.scrollLeft;
-  };
-  const move = (x) => {
-    if (!isDown) return;
-    const walk = x - el.offsetLeft - startX;
-    if (Math.abs(walk) > 5) moved = true;
-    el.scrollLeft = scrollLeft - walk;
-  };
-  const end = () => { isDown = false; el.classList.remove('dragging'); };
 
-  el.addEventListener('mousedown', (e) => start(e.pageX));
-  el.addEventListener('mousemove', (e) => move(e.pageX));
-  window.addEventListener('mouseup', end);
-  el.addEventListener('mouseleave', end);
-  el.addEventListener('touchstart', (e) => start(e.touches[0].pageX), { passive: true });
-  el.addEventListener('touchmove', (e) => move(e.touches[0].pageX), { passive: true });
-  el.addEventListener('touchend', end);
+  let pointerDown = false;
+  let startX = 0;
+  let startY = 0;
+  let startScrollLeft = 0;
+  let horizontalDrag = false;
+
+  const dragThreshold = opts.dragThreshold ?? 14;
+
+  el.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+    pointerDown = true;
+    horizontalDrag = false;
+    startX = event.clientX;
+    startY = event.clientY;
+    startScrollLeft = el.scrollLeft;
+    el.classList.add('dragging');
+
+    if (el.setPointerCapture) {
+      el.setPointerCapture(event.pointerId);
+    }
+  });
+
+  el.addEventListener('pointermove', (event) => {
+    if (!pointerDown) return;
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+
+    if (
+      !horizontalDrag &&
+      Math.abs(deltaX) > dragThreshold &&
+      Math.abs(deltaX) > Math.abs(deltaY)
+    ) {
+      horizontalDrag = true;
+    }
+
+    if (horizontalDrag) {
+      el.scrollLeft = startScrollLeft - deltaX;
+      event.preventDefault();
+    }
+  });
+
+  const endDrag = (event) => {
+    if (!pointerDown) return;
+    pointerDown = false;
+    el.classList.remove('dragging');
+
+    if (el.releasePointerCapture && el.hasPointerCapture?.(event.pointerId)) {
+      el.releasePointerCapture(event.pointerId);
+    }
+
+    window.setTimeout(() => {
+      horizontalDrag = false;
+    }, 0);
+  };
+
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
 
   if (opts.preventClickAfterDrag) {
-    el.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', (e) => { if (moved) e.preventDefault(); });
-    });
+    el.addEventListener(
+      'click',
+      (event) => {
+        if (!horizontalDrag) return;
+        event.preventDefault();
+        event.stopPropagation();
+      },
+      true
+    );
   }
 }
 
-makeDraggable(document.getElementById('dragGallery'), { preventClickAfterDrag: true });
+makeDraggable(document.getElementById('dragGallery'), {
+  preventClickAfterDrag: true,
+  dragThreshold: 14,
+});
 makeDraggable(document.getElementById('footerMarquee'));
 
 const marqueeEl = document.getElementById('footerMarquee');
@@ -254,3 +301,66 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   }
   requestAnimationFrame(animateCursor);
 }
+
+
+// ---------- Viewport-center gallery focus ----------
+const featuredItems = Array.from(document.querySelectorAll('[data-card]'));
+const digitalItems = Array.from(document.querySelectorAll('.reel-card'));
+const behindItems = Array.from(document.querySelectorAll('.behind-img'));
+const dragGallery = document.getElementById('dragGallery');
+
+function setFocusClass(element, distanceRatio) {
+  element.classList.remove('viewport-focus', 'viewport-soft', 'viewport-blur');
+
+  if (distanceRatio <= 0.22) {
+    element.classList.add('viewport-focus');
+    return;
+  }
+
+  if (distanceRatio <= 0.48) {
+    element.classList.add('viewport-soft');
+    return;
+  }
+
+  element.classList.add('viewport-blur');
+}
+
+function updateFeaturedFocus() {
+  const viewportCenterX = window.innerWidth / 2;
+
+  featuredItems.forEach((item) => {
+    const rect = item.getBoundingClientRect();
+    const itemCenterX = rect.left + rect.width / 2;
+    const distance = Math.abs(itemCenterX - viewportCenterX);
+    const ratio = distance / Math.max(window.innerWidth / 2, 1);
+    setFocusClass(item, ratio);
+  });
+}
+
+function updateVerticalGalleryFocus(items) {
+  const viewportCenterY = window.innerHeight / 2;
+
+  items.forEach((item) => {
+    const rect = item.getBoundingClientRect();
+    const itemCenterY = rect.top + rect.height / 2;
+    const distance = Math.abs(itemCenterY - viewportCenterY);
+    const ratio = distance / Math.max(window.innerHeight / 2, 1);
+    setFocusClass(item, ratio);
+  });
+}
+
+let focusFrame = 0;
+
+function updateGalleryFocus() {
+  cancelAnimationFrame(focusFrame);
+  focusFrame = requestAnimationFrame(() => {
+    updateFeaturedFocus();
+    updateVerticalGalleryFocus(digitalItems);
+    updateVerticalGalleryFocus(behindItems);
+  });
+}
+
+window.addEventListener('scroll', updateGalleryFocus, { passive: true });
+window.addEventListener('resize', updateGalleryFocus);
+dragGallery?.addEventListener('scroll', updateGalleryFocus, { passive: true });
+updateGalleryFocus();
