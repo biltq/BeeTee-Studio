@@ -73,8 +73,8 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 .about-pin {
   position: relative;
   z-index: 15;
-  height: 285svh;
-  margin-top: -38svh;
+  height: 190svh;
+  margin-top: 0;
 }
 
 .about-stage {
@@ -107,8 +107,8 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 @media (max-width: 767px) {
   .about-pin {
-    height: 320svh;
-    margin-top: -30svh;
+    height: 205svh;
+    margin-top: 0;
   }
 
   .about-copy {
@@ -289,11 +289,11 @@ header {
   }
 
   .services-image {
-    top: auto;
+    top: 22svh;
     right: 50%;
-    bottom: 10vh;
-    width: min(78vw, 28rem);
-    height: 42vh;
+    bottom: auto;
+    width: min(88vw, 31rem);
+    height: 52svh;
     transform: translateX(50%);
   }
 
@@ -334,4 +334,46 @@ header {
 
 .services-stage {
   background: transparent;
+}
+
+
+/* Footer scroll cue */
+.footer-scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0 auto 3.75rem;
+  color: #f3c005;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  line-height: 1;
+}
+
+.footer-scroll-chevrons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-scroll-chevrons svg {
+  width: 16px;
+  height: 16px;
+  margin-top: -7px;
+  animation: chevron-bounce 1.6s ease-in-out infinite;
+}
+
+.footer-scroll-chevrons svg:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.footer-scroll-chevrons svg:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@media (max-width: 767px) {
+  .footer-scroll-cue {
+    margin-bottom: 4.5rem;
+  }
 }
