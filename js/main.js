@@ -9,7 +9,7 @@ if (splashScreen) {
   });
 }
 
-// ---------- Reversible About reveal ----------
+// ---------- Pinned reversible About reveal ----------
 document.querySelectorAll('.word-reveal').forEach((paragraph) => {
   const words = paragraph.dataset.text.split(' ');
   const highlights = paragraph.dataset.highlight
@@ -18,49 +18,65 @@ document.querySelectorAll('.word-reveal').forEach((paragraph) => {
 
   paragraph.innerHTML = words.map((word) => {
     const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
-    const highlightClass = highlights.includes(cleanWord) ? 'word-highlight' : '';
+    const highlightClass = highlights.includes(cleanWord)
+      ? 'word-highlight'
+      : '';
+
     return `<span class="${highlightClass}">${word}</span>`;
   }).join(' ');
 });
 
 const aboutSection = document.getElementById('aboutSection');
-const aboutParagraphs = Array.from(
-  document.querySelectorAll('#aboutSection .word-reveal')
+const aboutWords = Array.from(
+  document.querySelectorAll('#aboutSection .word-reveal span')
 );
 
 function clamp(value, min = 0, max = 1) {
   return Math.min(Math.max(value, min), max);
 }
 
+function smoothstep(start, end, value) {
+  const progress = clamp((value - start) / (end - start));
+  return progress * progress * (3 - (2 * progress));
+}
+
 function updateAboutReveal() {
-  if (!aboutSection || aboutParagraphs.length === 0) return;
+  if (!aboutSection || aboutWords.length === 0) return;
 
   const rect = aboutSection.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
-  const travel = viewportHeight + rect.height;
-  const rawProgress = (viewportHeight - rect.top) / travel;
-  const centerProgress = clamp(rawProgress);
-  const visibilityEnvelope = 1 - Math.abs(centerProgress - 0.5) * 2;
-  const sectionVisibility = clamp(visibilityEnvelope * 1.55);
-
-  const allWords = aboutParagraphs.flatMap((paragraph) =>
-    Array.from(paragraph.querySelectorAll('span'))
+  const scrollableDistance = Math.max(
+    aboutSection.offsetHeight - window.innerHeight,
+    1
   );
+  const progress = clamp(-rect.top / scrollableDistance);
 
-  allWords.forEach((span, index) => {
-    const wordPosition = allWords.length <= 1
+  const revealPhase = smoothstep(0.02, 0.34, progress);
+  const exitPhase = smoothstep(0.76, 0.98, progress);
+
+  aboutWords.forEach((word, index) => {
+    const wordPosition = aboutWords.length <= 1
       ? 0
-      : index / (allWords.length - 1);
-    const focusProgress = clamp(
-      (centerProgress * 1.45) - (wordPosition * 0.45)
-    );
-    const opacity = clamp(focusProgress * sectionVisibility);
-    const blur = (1 - focusProgress) * 10 + (1 - sectionVisibility) * 4;
-    const translateY = (1 - focusProgress) * 10;
+      : index / (aboutWords.length - 1);
 
-    span.style.opacity = opacity.toFixed(3);
-    span.style.filter = `blur(${blur.toFixed(2)}px)`;
-    span.style.transform = `translateY(${translateY.toFixed(2)}px)`;
+    const staggeredReveal = smoothstep(
+      wordPosition * 0.24,
+      0.22 + (wordPosition * 0.24),
+      revealPhase
+    );
+
+    const staggeredExit = smoothstep(
+      wordPosition * 0.12,
+      0.45 + (wordPosition * 0.12),
+      exitPhase
+    );
+
+    const visibility = clamp(staggeredReveal * (1 - staggeredExit));
+    const blur = (1 - visibility) * 12;
+    const translateY = (1 - visibility) * 8;
+
+    word.style.opacity = visibility.toFixed(3);
+    word.style.filter = `blur(${blur.toFixed(2)}px)`;
+    word.style.transform = `translateY(${translateY.toFixed(2)}px)`;
   });
 }
 
@@ -112,26 +128,28 @@ function updatePinned() {
   const rect = pinSection.getBoundingClientRect();
   const viewportHeight = window.innerHeight;
   const total = Math.max(rect.height - viewportHeight, 1);
-  const progress = clamp(-rect.top / total);
-  const frameProgress = progress * frameCount;
 
-  const previewDistance = viewportHeight * 0.55;
-  const preview = rect.top > 0 && rect.top < previewDistance
-    ? clamp(1 - (rect.top / previewDistance))
+  const previewStart = viewportHeight * 0.72;
+  const previewProgress = rect.top > 0
+    ? clamp(1 - (rect.top / previewStart))
+    : 1;
+
+  const pinnedProgress = rect.top <= 0
+    ? clamp(-rect.top / total)
     : 0;
 
+  // PRODUCE reaches roughly half visibility as the section approaches,
+  // then continues from that exact state without resetting.
+  const entryProgress = ENTER_FRAC * 0.52;
+  const frameProgress = rect.top > 0
+    ? entryProgress * previewProgress
+    : entryProgress + (pinnedProgress * (frameCount - entryProgress));
+
   manifestoWords.forEach((element, index) => {
-    const localProgress = frameProgress - index;
-    const state = wordTransform(localProgress);
-
-    if (index === 0 && progress === 0 && preview > 0) {
-      state.opacity = Math.max(state.opacity, preview * 0.55);
-      state.y = 28 - (preview * 18);
-      state.scale = 0.9 + (preview * 0.06);
-    }
-
+    const state = wordTransform(frameProgress - index);
     element.style.opacity = state.opacity;
-    element.style.transform = `translateY(${state.y}px) scale(${state.scale})`;
+    element.style.transform =
+      `translateY(${state.y}px) scale(${state.scale})`;
   });
 
   frameDesc.forEach((element, index) => {
@@ -139,13 +157,7 @@ function updatePinned() {
   });
 
   frameImg.forEach((element, index) => {
-    let opacity = frameOpacity(frameProgress - index);
-
-    if (index === 0 && progress === 0 && preview > 0) {
-      opacity = Math.max(opacity, preview * 0.42);
-    }
-
-    element.style.opacity = opacity;
+    element.style.opacity = frameOpacity(frameProgress - index);
   });
 }
 
