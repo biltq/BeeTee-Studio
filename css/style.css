@@ -60,23 +60,25 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
   pointer-events: none;
 }
 
-/* scroll indicator: fades quickly and hides after the first bit of scroll */
-#scrollIndicator { transition: opacity 0.35s ease; }
-#scrollIndicator.scrolled { opacity: 0; pointer-events: none; }
+/* Persistent scroll indicator; hidden only at the bottom of the page. */
+#scrollIndicator { transition: opacity 0.35s ease, transform 0.35s ease; }
+#scrollIndicator.at-end { opacity: 0; pointer-events: none; transform: translate(-50%, 12px); }
 .chevron-bounce { animation: chevron-bounce 1.6s ease-in-out infinite; opacity: 0.3; }
 @keyframes chevron-bounce {
   0%, 100% { opacity: 0.15; }
   50% { opacity: 1; }
 }
 
-/* word-by-word reveal (about section) */
+/* Reversible scroll reveal for the About section. */
 .word-reveal span {
   display: inline-block;
-  opacity: 0.15;
-  transition: opacity 0.4s ease;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(10px);
+  will-change: opacity, filter, transform;
 }
-.word-reveal span.on { opacity: 1; }
 .word-reveal span.word-highlight { color: #f3c005; font-weight: 700; }
+.about-section { min-height: 82svh; display: flex; align-items: center; }
 
 /* pinned "I [WORD]" section: I is static; each word zooms in, and at full opacity its
    paired description + image are also fully visible (all three driven by the same frame index). */
@@ -181,3 +183,88 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
   transition: opacity 0.3s;
 }
 .contact-link:hover { opacity: 0.6; }
+
+
+/* Persistent site chrome */
+header {
+  transform: none !important;
+  transition: none !important;
+}
+
+.header-logo {
+  pointer-events: none;
+}
+
+/* Services / manifesto layout */
+.services-stage {
+  position: sticky;
+}
+
+.service-title {
+  font-size: clamp(3rem, 8.8vw, 8.5rem);
+}
+
+.services-desc {
+  left: 10vw;
+  bottom: 13vh;
+  width: min(38vw, 34rem);
+  font-size: clamp(0.68rem, 0.9vw, 0.92rem);
+  letter-spacing: 0.01em;
+}
+
+.services-image {
+  top: 50%;
+  right: 8vw;
+  width: min(42vw, 36rem);
+  height: min(62vh, 42rem);
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.services-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 1;
+}
+
+.manifesto-word-box {
+  width: 9.5ch;
+}
+
+@media (max-width: 767px) {
+  .header-logo {
+    height: 4rem !important;
+  }
+
+  .service-title {
+    font-size: clamp(2.65rem, 14vw, 5.25rem);
+  }
+
+  .services-stage {
+    align-items: flex-start;
+    padding-top: 26svh;
+  }
+
+  .services-image {
+    top: auto;
+    right: 50%;
+    bottom: 10vh;
+    width: min(78vw, 28rem);
+    height: 42vh;
+    transform: translateX(50%);
+  }
+
+  .services-desc {
+    left: 8vw;
+    right: 8vw;
+    bottom: 7vh;
+    width: auto;
+    font-size: clamp(0.64rem, 2.8vw, 0.82rem);
+  }
+
+  .manifesto-word-box {
+    width: 8.7ch;
+  }
+}
