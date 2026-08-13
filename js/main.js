@@ -81,6 +81,22 @@ function updateAboutReveal() {
     word.style.filter = `blur(${blur.toFixed(2)}px)`;
     word.style.transform = `translateY(${translateY.toFixed(2)}px)`;
   });
+
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    const mobileMoveStart = 0.30;
+    const mobileMoveProgress = clamp(
+      (revealProgress - mobileMoveStart) / (1 - mobileMoveStart)
+    );
+
+    // Slow upward drift instead of holding the block rigidly in place.
+    const mobileShift = mobileMoveProgress * 42;
+    aboutSection.style.setProperty(
+      '--about-mobile-shift',
+      `${mobileShift.toFixed(1)}px`
+    );
+  } else {
+    aboutSection.style.removeProperty('--about-mobile-shift');
+  }
 }
 
 window.addEventListener('scroll', updateAboutReveal, { passive: true });
