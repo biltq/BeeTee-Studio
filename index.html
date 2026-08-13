@@ -19,7 +19,7 @@
     }
   }
 </script>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="style_updated.css">
 </head>
 <body class="bg-ink text-white font-body overflow-x-hidden">
 
@@ -68,7 +68,7 @@
       <span class="h-2 w-2 rounded-full bg-[#ff3030] animate-rec"></span>
       <span class="text-[10px] tracking-[0.35em] text-white/60">REC</span>
     </div>
-    <span class="inline-block relative h-9 md:h-12" style="aspect-ratio: 161 / 95;">
+    <span class="header-logo inline-block relative h-[4.5rem] md:h-[6rem]" style="aspect-ratio: 161 / 95;">
       <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.png/v1/fit/w_250,h_96,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e5e053e3c_BEETEE_LOGO_HOR_MAIN_COMPACT_BORDER.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="BeeTee Studio">
     </span>
     <div class="absolute right-5 text-[10px] tracking-[0.35em] text-white/40 md:right-8">BT &middot; 2026</div>
@@ -99,7 +99,7 @@
   </section>
 
   <!-- ABOUT (word-stagger reveal) -->
-  <section class="px-6 py-28 md:py-36">
+  <section class="about-section px-6 py-28 md:py-36" id="aboutSection">
     <div class="mx-auto max-w-3xl text-left">
       <p class="word-reveal font-body text-base uppercase leading-relaxed md:text-xl md:leading-relaxed" id="aboutP1"
          data-text="From designing real-time graphics, to framing the cities that shape a broadcast&rsquo;s look and adds color, to producing stories from the heart of live games and animating the graphics that give it all its pulse."></p>
@@ -112,42 +112,42 @@
   <!-- SERVICES + MANIFESTO: "I" stays fixed; each word zooms in and, at full opacity, -->
   <!-- reveals its own paired description text + image, all synced to the same frame index. -->
   <section class="relative pin-services" id="pinServices">
-    <div class="sticky top-0 flex h-[100svh] w-full items-center overflow-hidden px-[8vw] md:px-[12vw]">
-      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="0">Creative direction from concept to final cut.</p>
-      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="1">Cinematography that frames the moment.</p>
-      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="2">Rhythm, pace, and the invisible cut.</p>
-      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="3">Movement that guides the eye.</p>
-      <p class="frame-desc absolute left-[8vw] right-[8vw] top-1/2 z-10 translate-y-[calc(-50%+30vh)] font-body text-base uppercase leading-relaxed text-gold md:left-[12vw] md:text-xl" data-frame="4">Stories worth watching.</p>
+    <div class="services-stage sticky top-0 flex h-[100svh] w-full items-center overflow-hidden px-[8vw] md:px-[10vw]">
+      <p class="frame-desc services-desc absolute z-20 font-body uppercase leading-relaxed text-gold" data-frame="0">Creative direction from concept to final cut.</p>
+      <p class="frame-desc services-desc absolute z-20 font-body uppercase leading-relaxed text-gold" data-frame="1">Cinematography that frames the moment.</p>
+      <p class="frame-desc services-desc absolute z-20 font-body uppercase leading-relaxed text-gold" data-frame="2">Rhythm, pace, and the invisible cut.</p>
+      <p class="frame-desc services-desc absolute z-20 font-body uppercase leading-relaxed text-gold" data-frame="3">Movement that guides the eye.</p>
+      <p class="frame-desc services-desc absolute z-20 font-body uppercase leading-relaxed text-gold" data-frame="4">Stories worth watching.</p>
 
-      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="0">
+      <div class="frame-img services-image absolute z-10" data-frame="0">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
           <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/e6139abf3_generated_6e7a65cb.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/e6139abf3_generated_6e7a65cb.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
-      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="1">
+      <div class="frame-img services-image absolute z-10" data-frame="1">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
           <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/815fb11c8_generated_3c4ff988.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/815fb11c8_generated_3c4ff988.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
-      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="2">
+      <div class="frame-img services-image absolute z-10" data-frame="2">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
           <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/33b0d13e1_generated_3cffcb13.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/33b0d13e1_generated_3cffcb13.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
-      <div class="frame-img absolute z-0 h-[52vh] w-[52vh] max-w-[88vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[70%] md:h-[64vh] md:w-[64vh] md:max-w-[50vw]" data-frame="3">
+      <div class="frame-img services-image absolute z-10" data-frame="3">
         <span class="animate-float-slow inline-block relative h-full w-full drop-shadow-[0_40px_90px_rgba(0,0,0,0.9)]">
           <img src="https://media.base44.com/images/public/6a6af1c8f0baf08d6a77ae64/ff228de69_generated_3d97101c.png/v1/fit/w_759,h_867,q_90,usm_0.66_1.00_0.01,enc_webp,quality_auto/ff228de69_generated_3d97101c.webp" loading="lazy" class="w-full h-full inset-0 absolute object-contain" alt="">
         </span>
       </div>
 
       <div class="relative z-20 flex items-baseline gap-[0.18em]">
-        <h2 class="manifesto-i relative z-10 select-none font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight text-gold">I</h2>
+        <h2 class="manifesto-i service-title relative z-20 select-none font-heading font-bold leading-none tracking-tight text-gold">I</h2>
         <div class="relative z-10 h-[1em] manifesto-word-box">
-          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="0">PRODUCE.</span>
-          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="1">CAPTURE.</span>
-          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="2">EDIT.</span>
-          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="3">ANIMATE.</span>
-          <span class="manifesto-word absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading text-[clamp(4.5rem,16.5vw,15rem)] font-bold leading-none tracking-tight" data-frame="4">CREATE.</span>
+          <span class="manifesto-word service-title absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading font-bold leading-none tracking-tight" data-frame="0">PRODUCE.</span>
+          <span class="manifesto-word service-title absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading font-bold leading-none tracking-tight" data-frame="1">CAPTURE.</span>
+          <span class="manifesto-word service-title absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading font-bold leading-none tracking-tight" data-frame="2">EDIT.</span>
+          <span class="manifesto-word service-title absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading font-bold leading-none tracking-tight" data-frame="3">ANIMATE.</span>
+          <span class="manifesto-word service-title absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap font-heading font-bold leading-none tracking-tight" data-frame="4">CREATE.</span>
         </div>
       </div>
     </div>
@@ -518,10 +518,10 @@
 
     <div class="mx-auto max-w-5xl px-6 pb-24 md:px-12">
       <div class="grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-2">
-        <a href="mailto:biltq@hotmail.com" class="group flex items-center justify-between bg-ink p-8 transition-colors duration-300 hover:bg-white/[0.03] md:p-10">
+        <a href="mailto:hello.beeteestudio@gmail.com" class="group flex items-center justify-between bg-ink p-8 transition-colors duration-300 hover:bg-white/[0.03] md:p-10">
           <div class="flex items-center gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 transition-colors duration-300 group-hover:text-white"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-            <span class="font-heading text-base font-medium tracking-tight md:text-lg">biltq@hotmail.com</span>
+            <span class="font-heading text-base font-medium tracking-tight md:text-lg">hello.beeteestudio@gmail.com</span>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/30 transition-all duration-300 group-hover:rotate-45 group-hover:text-white"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         </a>
@@ -558,6 +558,6 @@
 
 </main>
 
-<script src="js/main.js"></script>
+<script src="main_updated.js"></script>
 </body>
 </html>
