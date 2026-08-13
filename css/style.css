@@ -69,18 +69,22 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
   50% { opacity: 1; }
 }
 
-/* Pinned About section: copy remains centered while scroll drives focus. */
+/* About begins before the hero fully leaves and stays pinned while words focus. */
 .about-pin {
-  height: 300svh;
+  position: relative;
+  z-index: 15;
+  height: 285svh;
+  margin-top: -38svh;
 }
 
 .about-stage {
   overflow: hidden;
+  pointer-events: none;
 }
 
 .about-copy {
   margin-inline: auto;
-  transform: translateY(-1vh);
+  transform: translateY(0);
 }
 
 .word-reveal {
@@ -90,9 +94,9 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 .word-reveal span {
   display: inline-block;
-  opacity: 0;
-  filter: blur(12px);
-  transform: translateY(8px);
+  opacity: 0.08;
+  filter: blur(11px);
+  transform: translateY(4px);
   will-change: opacity, filter, transform;
 }
 
@@ -103,7 +107,8 @@ body.cursor-active .cursor-dot:nth-child(1) { opacity: 1; }
 
 @media (max-width: 767px) {
   .about-pin {
-    height: 340svh;
+    height: 320svh;
+    margin-top: -30svh;
   }
 
   .about-copy {
@@ -319,4 +324,14 @@ header {
 .header-logo img {
   opacity: 1;
   visibility: visible;
+}
+
+
+/* Keep transitions visually continuous between About and Services. */
+#pinServices {
+  z-index: 20;
+}
+
+.services-stage {
+  background: transparent;
 }
