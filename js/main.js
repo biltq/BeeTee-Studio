@@ -60,7 +60,7 @@ function updateAboutReveal() {
 
   const revealProgress = rect.top > 0
     ? entryProgress * 0.10
-    : clamp(0.10 + pinnedProgress * 2.10);
+    : clamp(0.10 + pinnedProgress * 3.15);
 
   aboutWords.forEach((word, index) => {
     const wordPosition = aboutWords.length <= 1
@@ -177,6 +177,7 @@ function makeDraggable(el, opts = {}) {
   let startY = 0;
   let startScrollLeft = 0;
   let horizontalDrag = false;
+  let suppressNextClick = false;
 
   const dragThreshold = opts.dragThreshold ?? 14;
 
@@ -210,6 +211,7 @@ function makeDraggable(el, opts = {}) {
     }
 
     if (horizontalDrag) {
+      suppressNextClick = true;
       el.scrollLeft = startScrollLeft - deltaX;
       event.preventDefault();
     }
@@ -224,9 +226,7 @@ function makeDraggable(el, opts = {}) {
       el.releasePointerCapture(event.pointerId);
     }
 
-    window.setTimeout(() => {
-      horizontalDrag = false;
-    }, 0);
+    horizontalDrag = false;
   };
 
   el.addEventListener('pointerup', endDrag);
@@ -236,7 +236,9 @@ function makeDraggable(el, opts = {}) {
     el.addEventListener(
       'click',
       (event) => {
-        if (!horizontalDrag) return;
+        if (!suppressNextClick) return;
+
+        suppressNextClick = false;
         event.preventDefault();
         event.stopPropagation();
       },
@@ -255,21 +257,27 @@ const marqueeEl = document.getElementById('footerMarquee');
 
 // ---------- Persistent header + scroll indicator ----------
 const scrollIndicator = document.getElementById('scrollIndicator');
+const pageFooter = document.querySelector('footer');
 
 function updateScrollIndicator() {
   if (!scrollIndicator) return;
 
-  const documentHeight = document.documentElement.scrollHeight;
-  const viewportBottom = window.scrollY + window.innerHeight;
-  const endThreshold = 24;
-  const atEnd = viewportBottom >= documentHeight - endThreshold;
+  const documentElement = document.documentElement;
+  const remaining =
+    documentElement.scrollHeight - window.innerHeight - window.scrollY;
 
-  scrollIndicator.classList.toggle('at-end', atEnd);
+  const footerHasEntered = pageFooter
+    ? pageFooter.getBoundingClientRect().top <= window.innerHeight * 0.92
+    : false;
+
+  scrollIndicator.classList.toggle(
+    'at-end',
+    remaining < 80 || footerHasEntered
+  );
 }
 
 window.addEventListener('scroll', updateScrollIndicator, { passive: true });
 window.addEventListener('resize', updateScrollIndicator);
-window.addEventListener('load', updateScrollIndicator);
 updateScrollIndicator();
 
 // ---------- Trailing custom cursor (desktop only) ----------
@@ -309,54 +317,66 @@ const digitalItems = Array.from(document.querySelectorAll('.reel-card'));
 const behindItems = Array.from(document.querySelectorAll('.behind-img'));
 const dragGallery = document.getElementById('dragGallery');
 
-function setFocusClass(element, distanceRatio) {
-  element.classList.remove('viewport-focus', 'viewport-soft', 'viewport-blur');
+function applyFocusState(element, distanceRatio) {
+  element.classList.remove(
+    'viewport-focus',
+    'viewport-soft',
+    'viewport-blur'
+  );
 
-  if (distanceRatio <= 0.22) {
+  if (distanceRatio <= 0.28) {
     element.classList.add('viewport-focus');
-    return;
-  }
-
-  if (distanceRatio <= 0.48) {
+  } else if (distanceRatio <= 0.68) {
     element.classList.add('viewport-soft');
-    return;
+  } else {
+    element.classList.add('viewport-blur');
   }
-
-  element.classList.add('viewport-blur');
 }
 
 function updateFeaturedFocus() {
   const viewportCenterX = window.innerWidth / 2;
 
-  featuredItems.forEach((item) => {
+  featuredItems.forEach((item, index) => {
+    if (index === 0) {
+      item.classList.remove(
+        'viewport-soft',
+        'viewport-blur'
+      );
+      item.classList.add('viewport-focus');
+      return;
+    }
+
     const rect = item.getBoundingClientRect();
-    const itemCenterX = rect.left + rect.width / 2;
-    const distance = Math.abs(itemCenterX - viewportCenterX);
+    const centerX = rect.left + rect.width / 2;
+    const distance = Math.abs(centerX - viewportCenterX);
     const ratio = distance / Math.max(window.innerWidth / 2, 1);
-    setFocusClass(item, ratio);
+
+    applyFocusState(item, ratio);
   });
 }
 
-function updateVerticalGalleryFocus(items) {
+function updateVerticalFocus(items) {
   const viewportCenterY = window.innerHeight / 2;
 
   items.forEach((item) => {
     const rect = item.getBoundingClientRect();
-    const itemCenterY = rect.top + rect.height / 2;
-    const distance = Math.abs(itemCenterY - viewportCenterY);
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.abs(centerY - viewportCenterY);
     const ratio = distance / Math.max(window.innerHeight / 2, 1);
-    setFocusClass(item, ratio);
+
+    applyFocusState(item, ratio);
   });
 }
 
-let focusFrame = 0;
+let galleryFocusFrame = 0;
 
 function updateGalleryFocus() {
-  cancelAnimationFrame(focusFrame);
-  focusFrame = requestAnimationFrame(() => {
+  cancelAnimationFrame(galleryFocusFrame);
+
+  galleryFocusFrame = requestAnimationFrame(() => {
     updateFeaturedFocus();
-    updateVerticalGalleryFocus(digitalItems);
-    updateVerticalGalleryFocus(behindItems);
+    updateVerticalFocus(digitalItems);
+    updateVerticalFocus(behindItems);
   });
 }
 
