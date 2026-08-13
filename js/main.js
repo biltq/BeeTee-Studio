@@ -9,53 +9,64 @@ if (splashScreen) {
   });
 }
 
-// ---------- Word-by-word reveal for "about" paragraphs ----------
-// Paragraph 1 reveals word-by-word on scroll; paragraph 2 only starts once paragraph 1 finishes.
-const WORD_STAGGER_MS = 35;
+// ---------- Reversible About reveal ----------
+document.querySelectorAll('.word-reveal').forEach((paragraph) => {
+  const words = paragraph.dataset.text.split(' ');
+  const highlights = paragraph.dataset.highlight
+    ? paragraph.dataset.highlight.split(',')
+    : [];
 
-document.querySelectorAll('.word-reveal').forEach((p) => {
-  const words = p.dataset.text.split(' ');
-  const highlights = p.dataset.highlight ? p.dataset.highlight.split(',') : [];
-  p.innerHTML = words.map((w) => {
-    const clean = w.toLowerCase().replace(/[^a-z]/g, '');
-    const cls = highlights.includes(clean) ? 'word-highlight' : '';
-    return `<span class="${cls}">${w}</span>`;
+  paragraph.innerHTML = words.map((word) => {
+    const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
+    const highlightClass = highlights.includes(cleanWord) ? 'word-highlight' : '';
+    return `<span class="${highlightClass}">${word}</span>`;
   }).join(' ');
 });
 
-function revealParagraph(p, onDone) {
-  const spans = p.querySelectorAll('span');
-  spans.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * WORD_STAGGER_MS));
-  if (onDone) setTimeout(onDone, spans.length * WORD_STAGGER_MS + 300);
+const aboutSection = document.getElementById('aboutSection');
+const aboutParagraphs = Array.from(
+  document.querySelectorAll('#aboutSection .word-reveal')
+);
+
+function clamp(value, min = 0, max = 1) {
+  return Math.min(Math.max(value, min), max);
 }
 
-const aboutP1 = document.getElementById('aboutP1');
-const aboutP2 = document.getElementById('aboutP2');
-if (aboutP1) {
-  const p1Observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        revealParagraph(aboutP1, () => { if (aboutP2) revealParagraph(aboutP2); });
-        p1Observer.unobserve(aboutP1);
-      }
-    });
-  }, { threshold: 0.4 });
-  p1Observer.observe(aboutP1);
+function updateAboutReveal() {
+  if (!aboutSection || aboutParagraphs.length === 0) return;
+
+  const rect = aboutSection.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const travel = viewportHeight + rect.height;
+  const rawProgress = (viewportHeight - rect.top) / travel;
+  const centerProgress = clamp(rawProgress);
+  const visibilityEnvelope = 1 - Math.abs(centerProgress - 0.5) * 2;
+  const sectionVisibility = clamp(visibilityEnvelope * 1.55);
+
+  const allWords = aboutParagraphs.flatMap((paragraph) =>
+    Array.from(paragraph.querySelectorAll('span'))
+  );
+
+  allWords.forEach((span, index) => {
+    const wordPosition = allWords.length <= 1
+      ? 0
+      : index / (allWords.length - 1);
+    const focusProgress = clamp(
+      (centerProgress * 1.45) - (wordPosition * 0.45)
+    );
+    const opacity = clamp(focusProgress * sectionVisibility);
+    const blur = (1 - focusProgress) * 10 + (1 - sectionVisibility) * 4;
+    const translateY = (1 - focusProgress) * 10;
+
+    span.style.opacity = opacity.toFixed(3);
+    span.style.filter = `blur(${blur.toFixed(2)}px)`;
+    span.style.transform = `translateY(${translateY.toFixed(2)}px)`;
+  });
 }
 
-document.querySelectorAll('.word-reveal').forEach((p) => {
-  if (p.id === 'aboutP1' || p.id === 'aboutP2') return;
-  const spans = p.querySelectorAll('span');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        spans.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * 25));
-        observer.unobserve(p);
-      }
-    });
-  }, { threshold: 0.4 });
-  observer.observe(p);
-});
+window.addEventListener('scroll', updateAboutReveal, { passive: true });
+window.addEventListener('resize', updateAboutReveal);
+updateAboutReveal();
 
 // ---------- Pinned "I [WORD]" section ----------
 // "I" is static throughout. Each of the 5 words zooms in from 0->1 opacity (with a scale-up),
@@ -96,22 +107,48 @@ function wordTransform(cp) {
 }
 
 function updatePinned() {
-  if (!pinSection) return;
-  const rect = pinSection.getBoundingClientRect();
-  const total = rect.height - window.innerHeight;
-  const progress = Math.min(Math.max(-rect.top / total, 0), 1);
-  const v = progress * frameCount;
+  if (!pinSection || frameCount === 0) return;
 
-  manifestoWords.forEach((el, i) => {
-    const { opacity, y, scale } = wordTransform(v - i);
-    el.style.opacity = opacity;
-    el.style.transform = `translateY(${y}px) scale(${scale})`;
+  const rect = pinSection.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const total = Math.max(rect.height - viewportHeight, 1);
+  const progress = clamp(-rect.top / total);
+  const frameProgress = progress * frameCount;
+
+  const previewDistance = viewportHeight * 0.55;
+  const preview = rect.top > 0 && rect.top < previewDistance
+    ? clamp(1 - (rect.top / previewDistance))
+    : 0;
+
+  manifestoWords.forEach((element, index) => {
+    const localProgress = frameProgress - index;
+    const state = wordTransform(localProgress);
+
+    if (index === 0 && progress === 0 && preview > 0) {
+      state.opacity = Math.max(state.opacity, preview * 0.55);
+      state.y = 28 - (preview * 18);
+      state.scale = 0.9 + (preview * 0.06);
+    }
+
+    element.style.opacity = state.opacity;
+    element.style.transform = `translateY(${state.y}px) scale(${state.scale})`;
   });
-  // Description + image share the exact same envelope/timing as their paired word, so all three
-  // frame elements always move together.
-  frameDesc.forEach((el, i) => { el.style.opacity = frameOpacity(v - i); });
-  frameImg.forEach((el, i) => { el.style.opacity = frameOpacity(v - i); });
+
+  frameDesc.forEach((element, index) => {
+    element.style.opacity = frameOpacity(frameProgress - index);
+  });
+
+  frameImg.forEach((element, index) => {
+    let opacity = frameOpacity(frameProgress - index);
+
+    if (index === 0 && progress === 0 && preview > 0) {
+      opacity = Math.max(opacity, preview * 0.42);
+    }
+
+    element.style.opacity = opacity;
+  });
 }
+
 window.addEventListener('scroll', updatePinned, { passive: true });
 window.addEventListener('resize', updatePinned);
 updatePinned();
@@ -160,25 +197,23 @@ document.getElementById('marqueeRight')?.addEventListener('click', () => {
   marqueeEl.scrollBy({ left: 400, behavior: 'smooth' });
 });
 
-// ---------- Header hide-on-scroll-down ----------
-let lastY = window.scrollY;
-const header = document.querySelector('header');
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  if (header) {
-    header.style.transition = 'transform 0.4s ease';
-    header.style.transform = (y > lastY && y > 200) ? 'translateY(-120%)' : 'translateY(0)';
-  }
-  lastY = y;
-}, { passive: true });
-
-// ---------- Scroll indicator hides as soon as the user scrolls ----------
+// ---------- Persistent header + scroll indicator ----------
 const scrollIndicator = document.getElementById('scrollIndicator');
+
 function updateScrollIndicator() {
   if (!scrollIndicator) return;
-  scrollIndicator.classList.toggle('scrolled', window.scrollY > 40);
+
+  const documentHeight = document.documentElement.scrollHeight;
+  const viewportBottom = window.scrollY + window.innerHeight;
+  const endThreshold = 24;
+  const atEnd = viewportBottom >= documentHeight - endThreshold;
+
+  scrollIndicator.classList.toggle('at-end', atEnd);
 }
+
 window.addEventListener('scroll', updateScrollIndicator, { passive: true });
+window.addEventListener('resize', updateScrollIndicator);
+window.addEventListener('load', updateScrollIndicator);
 updateScrollIndicator();
 
 // ---------- Trailing custom cursor (desktop only) ----------
